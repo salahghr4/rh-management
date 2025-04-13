@@ -17,8 +17,18 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
+        'nom',
+        'prenom',
         'email',
+        'adresse',
+        'telephone',
+        'date_embauche',
+        'poste',
+        'type_contrat',
+        'status',
+        'salaire',
+        'role',
+        'departement_id',
         'password',
     ];
 
@@ -42,6 +52,23 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'date_embauche' => 'date:Y-m-d',
+            'salaire' => 'decimal:2',
         ];
+    }
+
+    public function department()
+    {
+        return $this->belongsTo(Departement::class);
+    }
+
+    public function isAdmin()
+    {
+        return $this->role === 'admin';
+    }
+
+    public function isRh()
+    {
+        return $this->role === 'rh';
     }
 }

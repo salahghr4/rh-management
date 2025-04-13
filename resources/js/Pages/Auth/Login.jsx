@@ -71,7 +71,7 @@ export default function Login({ status, canResetPassword }) {
                     <InputError message={errors.password} className="mt-2" />
                 </div>
 
-                <div class="flex justify-between">
+                <div className="flex justify-between">
                     <div className="block mt-4">
                         <div className="mb-[0.125rem] block min-h-[1.5rem] pl-[1.5rem]">
                             <input
@@ -90,14 +90,6 @@ export default function Login({ status, canResetPassword }) {
                                 Remember me
                             </label>
                         </div>
-                    </div>
-                    <div className="mt-4">
-                        <Link
-                            href={route("register")}
-                            className="flex justify-end underline text-danger font-bold transition duration-150 ease-in-out hover:text-primary-600 focus:text-primary-600 active:text-primary-700 dark:text-primary-400 dark:hover:text-primary-500 dark:focus:text-primary-500 dark:active:text-primary-600"
-                        >
-                            Not registered?
-                        </Link>
                     </div>
                 </div>
 
