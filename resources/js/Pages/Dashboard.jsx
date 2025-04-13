@@ -12,7 +12,7 @@ export default function Dashboard({ auth }) {
 
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                    <div className="p-6 text-gray-900">Welcome back, {auth.user.name}! We've missed you. 👋</div>
+                    <div className="p-6 text-gray-900">Welcome back, {auth.user.nom}! We've missed you. 👋</div>
                     <div className="grid gap-4">
                         <Card className="row-start-2" title="Sales" badge="NEW" stat="14%" statDesc="Since yesterday"><p className="mb-4 text-base text-neutral-600 dark:text-neutral-200">
                             Some quick example text to build on the card title and make up the

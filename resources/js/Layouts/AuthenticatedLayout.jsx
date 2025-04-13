@@ -19,7 +19,7 @@ export default function Authenticated({ user, header, children }) {
                         <div className="flex">
                             <div className="shrink-0 flex items-center">
                                 <Link href="/">
-                                    <ApplicationLogo className="block h-9 w-auto fill-current text-gray-800" />
+                                    <ApplicationLogo className="block h-20 w-auto fill-current text-gray-800 " />
                                 </Link>
                             </div>
 
@@ -45,7 +45,7 @@ export default function Authenticated({ user, header, children }) {
                                                     className="w-8 rounded-full"
                                                     alt="Avatar"
                                                 />
-                                                &emsp;{user.name}
+                                                &emsp;{user.nom}
                                                 <svg
                                                     className="ms-2 -me-0.5 h-4 w-4"
                                                     xmlns="http://www.w3.org/2000/svg"
