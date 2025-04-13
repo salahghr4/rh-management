@@ -1,14 +1,12 @@
-import { useEffect } from "react";
-import Checkbox from "@/Components/Checkbox";
-import GuestLayout from "@/Layouts/GuestLayout";
+import ApplicationLogo from "@/Components/ApplicationLogo";
 import InputError from "@/Components/InputError";
 import InputLabel from "@/Components/InputLabel";
 import PrimaryButton from "@/Components/PrimaryButton";
 import TextInput from "@/Components/TextInput";
-import { TEInput, TERipple } from "tw-elements-react";
 import { Head, Link, useForm } from "@inertiajs/react";
+import { useEffect } from "react";
+import { TERipple } from "tw-elements-react";
 import img from "../../../Assest/img/authImg.avif";
-import ApplicationLogo from "@/Components/ApplicationLogo";
 
 export default function Login({ status, canResetPassword }) {
     const { data, setData, post, processing, errors, reset } = useForm({
