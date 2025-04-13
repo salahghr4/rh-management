@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Departement;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -24,10 +25,20 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->name(),
+            'nom' => fake()->lastName(),
+            'prenom' => fake()->firstName(),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
-            'password' => static::$password ??= Hash::make('password'),
+            'adresse' => fake()->address(),
+            'telephone' => "06" . fake()->randomNumber(8, true), // telephone aléatoire,
+            'date_embauche' => fake()->dateTimeBetween('-8 years', 'now')->format('Y-m-d'),
+            'poste' => fake()->jobTitle(),
+            'type_contrat' => fake()->randomElement(['CDI', 'CDD']),
+            'status' => 'active',
+            'salaire' => fake()->randomFloat(2, 4000, 30000), // Salaire entre 4000 et 40,000
+            'role' => fake()->randomElement(['admin', 'employee', 'rh', 'manager']),
+            'departement_id' => Departement::inRandomOrder()->first()->id ?? Departement::factory(),
+            'password' => Hash::make('password123'), // mot de passe sécurisé
             'remember_token' => Str::random(10),
         ];
     }
