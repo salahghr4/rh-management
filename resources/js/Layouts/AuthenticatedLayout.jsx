@@ -72,28 +72,34 @@ export default function Authenticated({ user, header, children }) {
                     </div>
                     <Menu
                         menuItemStyles={{
-                            button: ({ level, active, disabled }) => {
-                                // only apply styles on first level elements of the tree
-                                if (level === 0)
-                                    return {
-                                        color: disabled ? "blue" : "#3b71ca",
+                            button: ({ active }) => {
+                                return {
+                                    color: active ? "#fff" : "#2563eb",
+                                    backgroundColor: active
+                                        ? "#2563eb"
+                                        : undefined,
+
+                                    "&:hover": {
                                         backgroundColor: active
-                                            ? "#eecef9"
-                                            : undefined,
-                                    };
+                                            ? "#3a72ed"
+                                            : "#2563eb",
+                                        color: active ? "#fff" : "#fff",
+                                    },
+                                };
                             },
                         }}
                     >
                         <MenuItem
                             className="my-3 relative group"
                             icon={<LayoutDashboard size={20} />}
+                            active={window.location.pathname === "/dashboard"}
                         >
                             {" "}
                             Dashboard
                         </MenuItem>
                         <MenuItem className="my-3" icon={<Users size={22} />}>
                             {" "}
-                            Employes
+                            Employées
                         </MenuItem>
 
                         <MenuItem
@@ -122,7 +128,7 @@ export default function Authenticated({ user, header, children }) {
                                 className="p-2 bg-white rounded shadow"
                             >
                                 {isMobile ? (
-                                    <ChevronLast size={20} />
+                                    <ChevronLast />
                                 ) : collapsed ? (
                                     <ChevronLast />
                                 ) : (
