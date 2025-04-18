@@ -8,14 +8,34 @@ import {
     LayoutDashboard,
     Users,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Menu, MenuItem, Sidebar } from "react-pro-sidebar";
 import iconImg from "../../Assest/img/logoIcon.png";
 
 export default function Authenticated({ user, header, children }) {
-    const [expanded, setExpanded] = useState(false); // Default to expanded on desktop
+    const [collapsed, setCollapsed] = useState(false); // Default to collapsed on desktop
     const [toggled, setToggled] = useState(false); // for mobile
-    const isMobile = window.innerWidth < 768;
+    const [isMobile, setIsMobile] = useState(
+        window.innerWidth < 768 ? true : false
+    ); // Check if the screen is mobile size
+
+    useEffect(() => {
+        const handleResize = () => {
+            if (window.innerWidth < 768) {
+                setCollapsed(false);
+                setToggled(false);
+                setIsMobile(true);
+            } else {
+                setIsMobile(false);
+            }
+        };
+
+        window.addEventListener("resize", handleResize);
+
+        return () => {
+            window.removeEventListener("resize", handleResize);
+        };
+    });
 
     const title =
         window.location.pathname.split("/")[1].charAt(0).toLocaleUpperCase() +
@@ -23,9 +43,10 @@ export default function Authenticated({ user, header, children }) {
 
     const handleToggle = () => {
         if (isMobile) {
+            setCollapsed(false);
             setToggled((prev) => !prev);
         } else {
-            setExpanded((prev) => !prev);
+            setCollapsed((prev) => !prev);
         }
     };
 
@@ -35,7 +56,7 @@ export default function Authenticated({ user, header, children }) {
                 {/* Sidebar */}
                 <Sidebar
                     breakPoint="md"
-                    collapsed={expanded}
+                    collapsed={collapsed}
                     onToggle={setToggled}
                     toggled={toggled}
                     className="h-full"
@@ -43,7 +64,7 @@ export default function Authenticated({ user, header, children }) {
                     onBackdropClick={() => setToggled(false)}
                 >
                     <div className="p-5">
-                        {expanded ? (
+                        {collapsed ? (
                             <img src={iconImg} className="fill-current" />
                         ) : (
                             <ApplicationLogo className="" />
@@ -100,7 +121,13 @@ export default function Authenticated({ user, header, children }) {
                                 onClick={handleToggle}
                                 className="p-2 bg-white rounded shadow"
                             >
-                                {expanded ? <ChevronLast /> : <ChevronFirst />}
+                                {isMobile ? (
+                                    <ChevronLast size={20} />
+                                ) : collapsed ? (
+                                    <ChevronLast />
+                                ) : (
+                                    <ChevronFirst />
+                                )}
                             </button>
                             <h1 className="text-xl font-bold">{title}</h1>
                         </div>
