@@ -16,9 +16,9 @@ createInertiaApp({
         const root = createRoot(el);
 
         root.render(
-        <ThemeProvider>
+        // <ThemeProvider>
             <App {...props} />
-        </ThemeProvider>
+        // </ThemeProvider>
     );
     },
     progress: {

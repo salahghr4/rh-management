@@ -35,8 +35,8 @@ class UserFactory extends Factory
             'poste' => fake()->jobTitle(),
             'type_contrat' => fake()->randomElement(['CDI', 'CDD']),
             'status' => 'active',
-            'salaire' => fake()->randomFloat(2, 4000, 30000), // Salaire entre 4000 et 40,000
-            'role' => fake()->randomElement(['admin', 'employee', 'rh', 'manager']),
+            'salaire' => fake()->randomFloat(2, 4000, 30000), // Salaire entre 4000 et 30,000
+            'role' => fake()->randomElement(['admin', 'employe', 'rh', 'manager']),
             'departement_id' => Departement::inRandomOrder()->first()->id ?? Departement::factory(),
             'password' => Hash::make('password123'), // mot de passe sécurisé
             'joures_conges_restant' => 18,
