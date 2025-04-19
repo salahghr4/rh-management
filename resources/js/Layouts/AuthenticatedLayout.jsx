@@ -8,9 +8,10 @@ import {
     LayoutDashboard,
     Users,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Menu, MenuItem, Sidebar } from "react-pro-sidebar";
 import iconImg from "../../Assest/img/logoIcon.png";
+import { ThemeContext } from "@/contexts/ThemeContext";
 
 export default function Authenticated({ user, header, children }) {
     const [collapsed, setCollapsed] = useState(false); // Default to collapsed on desktop
@@ -49,18 +50,21 @@ export default function Authenticated({ user, header, children }) {
             setCollapsed((prev) => !prev);
         }
     };
-
+    const { mode, changeTheme } = useContext(ThemeContext);
+    const isDark =
+  mode === 'dark' || (mode === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
     return (
         <>
-            <div className="flex h-screen bg-gray-100">
+            <div className="flex h-screen bg-gray-100 dark:bg-black">
                 {/* Sidebar */}
+
                 <Sidebar
                     breakPoint="md"
                     collapsed={collapsed}
                     onToggle={setToggled}
                     toggled={toggled}
                     className="h-full"
-                    backgroundColor="#fff"
+                    backgroundColor={isDark ? '#000' : '#ffff'}
                     onBackdropClick={() => setToggled(false)}
                 >
                     <div className="p-5">
@@ -121,11 +125,11 @@ export default function Authenticated({ user, header, children }) {
                 {/* Main Content */}
                 <div className="flex-1 flex-col relative z-10">
                     {/* Header */}
-                    <header className="bg-white shadow-md p-4 flex justify-between items-center">
+                    <header className="bg-white shadow-md p-4 flex justify-between items-center dark:bg-gray-900">
                         <div className="flex gap-5 items-center">
                             <button
                                 onClick={handleToggle}
-                                className="p-2 bg-white rounded shadow"
+                                className="p-2 bg-white rounded shadow dark:bg-slate-800 dark:text-white"
                             >
                                 {isMobile ? (
                                     <ChevronLast />
@@ -135,7 +139,16 @@ export default function Authenticated({ user, header, children }) {
                                     <ChevronFirst />
                                 )}
                             </button>
-                            <h1 className="text-xl font-bold">{title}</h1>
+                            <h1 className="text-xl font-bold ">{title}</h1>
+                <select
+                    value={mode}
+                    onChange={(e) => changeTheme(e.target.value)}
+                    className="bg-transparent dark:bg-black  rounded-full border-0 "
+                    >
+                    <option value="light">☀️</option>
+                    <option value="dark">🌙</option>
+                    <option value="system">🖥️</option>
+                </select>
                         </div>
                         {/* <Users size={18} /> */}
                         {/* <input type="text" /> */}
@@ -143,10 +156,10 @@ export default function Authenticated({ user, header, children }) {
                             <div className="ms-3 relative">
                                 <Dropdown>
                                     <Dropdown.Trigger>
-                                        <span className="inline-flex rounded-md">
+                                        <span className="inline-flex rounded-md ">
                                             <button
                                                 type="button"
-                                                className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150"
+                                                className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150 dark:bg-black dark:text-white"
                                             >
                                                 <img
                                                     src="https://tecdn.b-cdn.net/img/new/avatars/2.webp"
@@ -190,7 +203,7 @@ export default function Authenticated({ user, header, children }) {
                     </header>
 
                     {/* Page Content */}
-                    <main className="p-6 overflow-auto">{children}</main>
+                    <main className="p-6 overflow-auto ">{children}</main>
                 </div>
             </div>
         </>
