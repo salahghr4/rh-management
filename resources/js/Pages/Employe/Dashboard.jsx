@@ -5,21 +5,21 @@ import { DollarSign, Package, Users, ShoppingCart } from "lucide-react";
 
 export default function Dashboard({
     auth,
+    employees,
     totalEmployes,
     demandeConges,
-    totalAbsence,
-    departementCount,
-    departmentWithEmployees,
-    absenceTypes,
-    employees
+    joursConge,
+    joursAbsence,
+    paisParMois,
+    absences
 }) {
     console.log("employees", employees);
-    console.log("absenceTypes", absenceTypes);
-    console.log("departmentWithEmployees", departmentWithEmployees);
-    console.log("totalAbsence", totalAbsence);
-    console.log("demandeConges", demandeConges);
     console.log("totalEmployes", totalEmployes);
-    console.log("departementCount", departementCount);
+    console.log("demandeConges", demandeConges);
+    console.log("jouresConge", joursConge);
+    console.log("joursAbsence", joursAbsence);
+    console.log("paisParMois", paisParMois);
+    console.log("absences", absences);
     return (
         <AuthenticatedLayout user={auth.user}>
             <Head title="Dashboard" />

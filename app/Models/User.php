@@ -57,7 +57,7 @@ class User extends Authenticatable
         ];
     }
 
-    public function department()
+    public function departement()
     {
         return $this->belongsTo(Departement::class);
     }
@@ -70,5 +70,10 @@ class User extends Authenticatable
     public function isRh()
     {
         return $this->role === 'rh';
+    }
+
+    public function paie()
+    {
+        return $this->hasMany(Paie::class);
     }
 }

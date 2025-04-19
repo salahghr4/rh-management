@@ -50,9 +50,9 @@ export default function Authenticated({ user, header, children }) {
             setCollapsed((prev) => !prev);
         }
     };
-    const { mode, changeTheme } = useContext(ThemeContext);
-    const isDark =
-  mode === 'dark' || (mode === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+//     const { mode, changeTheme } = useContext(ThemeContext);
+//     const isDark =
+//   mode === 'dark' || (mode === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
     return (
         <>
             <div className="flex h-screen overflow-hidden bg-gray-100 dark:bg-black">
@@ -64,7 +64,7 @@ export default function Authenticated({ user, header, children }) {
                     onToggle={setToggled}
                     toggled={toggled}
                     className="h-full"
-                    backgroundColor={isDark ? '#000' : '#ffff'}
+                    backgroundColor={'#fff'}
                     onBackdropClick={() => setToggled(false)}
                 >
                     <div className="p-5">
@@ -140,7 +140,7 @@ export default function Authenticated({ user, header, children }) {
                                 )}
                             </button>
                             <h1 className="text-xl font-bold ">{title}</h1>
-                <select
+                {/* <select
                     value={mode}
                     onChange={(e) => changeTheme(e.target.value)}
                     className="bg-transparent dark:bg-black  rounded-full border-0 "
@@ -148,7 +148,7 @@ export default function Authenticated({ user, header, children }) {
                     <option value="light">☀️</option>
                     <option value="dark">🌙</option>
                     <option value="system">🖥️</option>
-                </select>
+                </select> */}
                         </div>
                         {/* <Users size={18} /> */}
                         {/* <input type="text" /> */}
