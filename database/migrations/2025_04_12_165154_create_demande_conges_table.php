@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('absences', function (Blueprint $table) {
+        Schema::create('demande_conges', function (Blueprint $table) {
             $table->id();
             $table->date('date_debut');
             $table->date('date_fin');
@@ -19,6 +19,7 @@ return new class extends Migration
             $table->enum('type', ['congé', 'maladie', 'autre'])->default('congé');
             $table->text('commentaire')->nullable();
             $table->foreignId('employe_id')->constrained('users')->onDelete('cascade');
+            $table->text('commentaire_rh')->nullable();
             $table->timestamps();
         });
     }
@@ -28,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('absences');
+        Schema::dropIfExists('demande_conges');
     }
 };

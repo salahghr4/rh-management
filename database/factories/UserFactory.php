@@ -39,6 +39,7 @@ class UserFactory extends Factory
             'role' => fake()->randomElement(['admin', 'employee', 'rh', 'manager']),
             'departement_id' => Departement::inRandomOrder()->first()->id ?? Departement::factory(),
             'password' => Hash::make('password123'), // mot de passe sécurisé
+            'joures_conges_restant' => 18,
             'remember_token' => Str::random(10),
         ];
     }
