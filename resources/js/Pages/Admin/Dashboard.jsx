@@ -1,7 +1,7 @@
 import Chart from '@/Components/Chart';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
-import { DollarSign , CalendarCheck ,Clock , Users,Plane, ShoppingCart } from "lucide-react";
+import { DollarSign , Package, Users, ShoppingCart } from "lucide-react";
 import { Table, Tag } from "antd";
 
 export default function Dashboard({ auth }) {
@@ -77,7 +77,7 @@ export default function Dashboard({ auth }) {
           <h3 className="text-lg font-semibold text-gray-700 dark:text-white">Total Employeés</h3>
           <p className="text-3xl font-bold text-blue-900 dark:text-white">155</p>
         </div>
-        <Users className="w-12 h-12 text-yellow-500" />
+        <Package className="w-12 h-12 text-blue-500" />
       </div>
 
       {/* Total Orders */}
@@ -86,7 +86,7 @@ export default function Dashboard({ auth }) {
           <h3 className="text-lg font-semibold text-gray-700 dark:text-white">Demande de congés</h3>
           <p className="text-3xl font-bold text-red-900 dark:text-white">10</p>
         </div>
-        <Plane  className="w-12 h-12 text-red-500" />
+        <ShoppingCart className="w-12 h-12 text-red-500" />
       </div>
 
       {/* Total Customers */}
@@ -95,7 +95,7 @@ export default function Dashboard({ auth }) {
           <h3 className="text-lg font-semibold text-gray-700 dark:text-white">Jours restants de congés</h3>
           <p className="text-3xl font-bold text-yellow-900 dark:text-white">15</p>
         </div>
-        <Clock  className="w-12 h-12 text-blue-500" />
+        <Users className="w-12 h-12 text-yellow-500" />
       </div>
 
       {/* Traffic Analytics */}
@@ -104,7 +104,7 @@ export default function Dashboard({ auth }) {
           <h3 className="text-lg font-semibold text-gray-700 dark:text-white">Jours des absence</h3>
           <p className="text-3xl font-bold text-green-900 dark:text-white">10</p>
         </div>
-        <CalendarCheck  className="w-12 h-12 text-green-500" />
+        <DollarSign className="w-12 h-12 text-green-500" />
       </div>
     </div>
 
@@ -126,11 +126,9 @@ export default function Dashboard({ auth }) {
     }} />
   </div>
 
+  <Table dataSource={dataSource} columns={columns} pagination={{ pageSize: 5 }} />
   {/* <Table dataSource={dataSource} columns={columns} pagination={{ pageSize: 5 }} /> */}
   
-  </div>
-  <div className="my-5">
-    <Table dataSource={dataSource} columns={columns} pagination={{ pageSize: 5 }} />
   </div>
 
 

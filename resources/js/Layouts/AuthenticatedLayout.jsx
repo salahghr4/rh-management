@@ -55,7 +55,7 @@ export default function Authenticated({ user, header, children }) {
   mode === 'dark' || (mode === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
     return (
         <>
-            <div className="flex h-screen bg-gray-100 dark:bg-black">
+            <div className="flex h-screen overflow-hidden bg-gray-100 dark:bg-black">
                 {/* Sidebar */}
 
                 <Sidebar
@@ -123,7 +123,7 @@ export default function Authenticated({ user, header, children }) {
                 </Sidebar>
 
                 {/* Main Content */}
-                <div className="flex-1 flex-col relative z-10">
+                <div className="flex-1 flex flex-col overflow-hidden">
                     {/* Header */}
                     <header className="bg-white shadow-md p-4 flex justify-between items-center dark:bg-gray-900">
                         <div className="flex gap-5 items-center">
@@ -203,7 +203,7 @@ export default function Authenticated({ user, header, children }) {
                     </header>
 
                     {/* Page Content */}
-                    <main className="p-6 overflow-auto ">{children}</main>
+                    <main className="p-6 overflow-auto flex-1 ">{children}</main>
                 </div>
             </div>
         </>
