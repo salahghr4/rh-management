@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Absence>
  */
-class Paie extends Factory
+class PaieFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -17,12 +17,13 @@ class Paie extends Factory
      */
     public function definition(): array
     {
+        $user = User::inRandomOrder()->first() ?? User::factory();
         $date = $this->faker->dateTimeBetween('-5 months', 'now');
         return [
-            'montant' => $this->faker->randomFloat(2, 4000, 30000),
+            'montant' => $user->salaire,
             'date' => $date,
-            'primes' => $this->faker->numberBetween(100, 1000),
-            'employe_id' => User::inRandomOrder()->first()->id ?? User::factory(),
+            'primes' => null,
+            'employe_id' => $user->id,
             'created_at' => $date,
             'updated_at' => now(),
         ];

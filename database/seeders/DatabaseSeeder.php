@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             DemandeCongeSeeder::class,
             AbsenceSeeder::class,
+            PaieSeeder::class,
         ]);
     }
 }

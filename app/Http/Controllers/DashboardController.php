@@ -78,17 +78,7 @@ class DashboardController extends Controller
             ->count();
 
         // get the paie for the last 7 months
-        $paies = Paie::where('employe_id', auth()->user()->id)
-            ->whereMonth('created_at', '>=', now()->subMonths(7)->month)
-            ->whereYear('created_at', now()->year)
-            ->get()
-            ->map(function ($paie) {
-                return [
-                    'id' => $paie->id,
-                    'salaire' => $paie->salaire,
-                    'date' => $paie->created_at->format('F Y'),
-                ];
-            });
+        $paies = Paie::where('employe_id', auth()->user()->id)->get();
 
         return Inertia::render('Employe/Dashboard', [
             'employees' => $employees,
