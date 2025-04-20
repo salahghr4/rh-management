@@ -22,7 +22,7 @@ class PaieFactory extends Factory
         return [
             'montant' => $user->salaire,
             'date' => $date,
-            'primes' => null,
+            'primes' => $this->faker->randomFloat(2, 100, 1000),
             'employe_id' => $user->id,
             'created_at' => $date,
             'updated_at' => now(),

@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Absence;
-use App\Models\DemandeConge;
-use App\Models\Departement;
 use App\Models\Paie;
 use App\Models\User;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
+use App\Models\Absence;
+use App\Models\Departement;
+use App\Models\DemandeConge;
+use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
@@ -52,9 +52,7 @@ class DashboardController extends Controller
         ]);
     }
 
-    /**
-     * Show the application dashboard for the employee.
-     */
+
     public function employe()
     {
         $employees = User::with('departement')
