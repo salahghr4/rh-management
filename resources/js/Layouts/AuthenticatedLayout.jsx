@@ -157,7 +157,7 @@ export default function Authenticated({ user, header, children }) {
                                 <Dropdown>
                                     <Dropdown.Trigger>
                                         <span className="inline-flex rounded-md ">
-                                        <div className="w-9 h-9 rounded-full bg-blue-500 text-white flex items-center justify-center">
+                                        <div className="w-9 h-9 cursor-pointer rounded-full bg-blue-500 text-white flex items-center justify-center">
                                                     {user?.nom
                                                         ?.charAt(0)
                                                         .toLocaleUpperCase() +
