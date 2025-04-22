@@ -8,10 +8,9 @@ import {
     LayoutDashboard,
     Users,
 } from "lucide-react";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Menu, MenuItem, Sidebar } from "react-pro-sidebar";
 import iconImg from "../../Assest/img/logoIcon.png";
-import { ThemeContext } from "@/contexts/ThemeContext";
 
 export default function Authenticated({ user, header, children }) {
     const [collapsed, setCollapsed] = useState(false); // Default to collapsed on desktop
@@ -50,12 +49,12 @@ export default function Authenticated({ user, header, children }) {
             setCollapsed((prev) => !prev);
         }
     };
-//     const { mode, changeTheme } = useContext(ThemeContext);
-//     const isDark =
-//   mode === 'dark' || (mode === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    //     const { mode, changeTheme } = useContext(ThemeContext);
+    //     const isDark =
+    //   mode === 'dark' || (mode === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
     return (
         <>
-            <div className="flex h-screen bg-gray-100 dark:bg-black">
+            <div className="flex h-screen overflow-hidden bg-gray-100 dark:bg-black">
                 {/* Sidebar */}
 
                 <Sidebar
@@ -64,7 +63,7 @@ export default function Authenticated({ user, header, children }) {
                     onToggle={setToggled}
                     toggled={toggled}
                     className="h-full"
-                    backgroundColor={'#fff'}
+                    backgroundColor={"#fff"}
                     onBackdropClick={() => setToggled(false)}
                 >
                     <div className="p-5">
@@ -96,7 +95,12 @@ export default function Authenticated({ user, header, children }) {
                         <MenuItem
                             className="my-3 relative group"
                             icon={<LayoutDashboard size={20} />}
-                            active={window.location.pathname === "/dashboard"}
+                            active={
+                                window.location.pathname ===
+                                    "/admin/dashboard" ||
+                                window.location.pathname ===
+                                    "/employe/dashboard"
+                            }
                         >
                             {" "}
                             Dashboard
@@ -123,9 +127,9 @@ export default function Authenticated({ user, header, children }) {
                 </Sidebar>
 
                 {/* Main Content */}
-                <div className="flex-1 flex-col relative z-10">
+                <div className="flex-1 flex flex-col overflow-hidden">
                     {/* Header */}
-                    <header className="bg-white shadow-md p-4 flex justify-between items-center dark:bg-gray-900">
+                    <header className="z-50 bg-white shadow-md p-4 flex justify-between items-center dark:bg-gray-900">
                         <div className="flex gap-5 items-center">
                             <button
                                 onClick={handleToggle}
@@ -140,7 +144,7 @@ export default function Authenticated({ user, header, children }) {
                                 )}
                             </button>
                             <h1 className="text-xl font-bold ">{title}</h1>
-                {/* <select
+                            {/* <select
                     value={mode}
                     onChange={(e) => changeTheme(e.target.value)}
                     className="bg-transparent dark:bg-black  rounded-full border-0 "
@@ -157,29 +161,14 @@ export default function Authenticated({ user, header, children }) {
                                 <Dropdown>
                                     <Dropdown.Trigger>
                                         <span className="inline-flex rounded-md ">
-                                            <button
-                                                type="button"
-                                                className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150 dark:bg-black dark:text-white"
-                                            >
-                                                <img
-                                                    src="https://tecdn.b-cdn.net/img/new/avatars/2.webp"
-                                                    className="w-8 rounded-full"
-                                                    alt="Avatar"
-                                                />
-                                                &emsp;{user.nom}
-                                                <svg
-                                                    className="ms-2 -me-0.5 h-4 w-4"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    viewBox="0 0 20 20"
-                                                    fill="currentColor"
-                                                >
-                                                    <path
-                                                        fillRule="evenodd"
-                                                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                                        clipRule="evenodd"
-                                                    />
-                                                </svg>
-                                            </button>
+                                            <div className="w-9 h-9 cursor-pointer rounded-full bg-blue-500 text-white flex items-center justify-center">
+                                                {user?.nom
+                                                    ?.charAt(0)
+                                                    .toLocaleUpperCase() +
+                                                    user?.prenom
+                                                        ?.charAt(0)
+                                                        .toLocaleUpperCase()}
+                                            </div>
                                         </span>
                                     </Dropdown.Trigger>
 
@@ -203,7 +192,9 @@ export default function Authenticated({ user, header, children }) {
                     </header>
 
                     {/* Page Content */}
-                    <main className="p-6 overflow-auto ">{children}</main>
+                    <main className="p-6 overflow-auto flex-1 ">
+                        {children}
+                    </main>
                 </div>
             </div>
         </>
