@@ -8,10 +8,9 @@ import {
     LayoutDashboard,
     Users,
 } from "lucide-react";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Menu, MenuItem, Sidebar } from "react-pro-sidebar";
 import iconImg from "../../Assest/img/logoIcon.png";
-import { ThemeContext } from "@/contexts/ThemeContext";
 
 export default function Authenticated({ user, header, children }) {
     const [collapsed, setCollapsed] = useState(false); // Default to collapsed on desktop
@@ -50,9 +49,9 @@ export default function Authenticated({ user, header, children }) {
             setCollapsed((prev) => !prev);
         }
     };
-//     const { mode, changeTheme } = useContext(ThemeContext);
-//     const isDark =
-//   mode === 'dark' || (mode === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    //     const { mode, changeTheme } = useContext(ThemeContext);
+    //     const isDark =
+    //   mode === 'dark' || (mode === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
     return (
         <>
             <div className="flex h-screen overflow-hidden bg-gray-100 dark:bg-black">
@@ -64,7 +63,7 @@ export default function Authenticated({ user, header, children }) {
                     onToggle={setToggled}
                     toggled={toggled}
                     className="h-full"
-                    backgroundColor={'#fff'}
+                    backgroundColor={"#fff"}
                     onBackdropClick={() => setToggled(false)}
                 >
                     <div className="p-5">
@@ -96,7 +95,12 @@ export default function Authenticated({ user, header, children }) {
                         <MenuItem
                             className="my-3 relative group"
                             icon={<LayoutDashboard size={20} />}
-                            active={window.location.pathname === "/admin/dashboard" || window.location.pathname === "/employe/dashboard"}
+                            active={
+                                window.location.pathname ===
+                                    "/admin/dashboard" ||
+                                window.location.pathname ===
+                                    "/employe/dashboard"
+                            }
                         >
                             {" "}
                             Dashboard
@@ -125,7 +129,7 @@ export default function Authenticated({ user, header, children }) {
                 {/* Main Content */}
                 <div className="flex-1 flex flex-col overflow-hidden">
                     {/* Header */}
-                    <header className="bg-white shadow-md p-4 flex justify-between items-center dark:bg-gray-900">
+                    <header className="z-50 bg-white shadow-md p-4 flex justify-between items-center dark:bg-gray-900">
                         <div className="flex gap-5 items-center">
                             <button
                                 onClick={handleToggle}
@@ -140,7 +144,7 @@ export default function Authenticated({ user, header, children }) {
                                 )}
                             </button>
                             <h1 className="text-xl font-bold ">{title}</h1>
-                {/* <select
+                            {/* <select
                     value={mode}
                     onChange={(e) => changeTheme(e.target.value)}
                     className="bg-transparent dark:bg-black  rounded-full border-0 "
@@ -157,14 +161,14 @@ export default function Authenticated({ user, header, children }) {
                                 <Dropdown>
                                     <Dropdown.Trigger>
                                         <span className="inline-flex rounded-md ">
-                                        <div className="w-9 h-9 cursor-pointer rounded-full bg-blue-500 text-white flex items-center justify-center">
-                                                    {user?.nom
+                                            <div className="w-9 h-9 cursor-pointer rounded-full bg-blue-500 text-white flex items-center justify-center">
+                                                {user?.nom
+                                                    ?.charAt(0)
+                                                    .toLocaleUpperCase() +
+                                                    user?.prenom
                                                         ?.charAt(0)
-                                                        .toLocaleUpperCase() +
-                                                        user?.prenom
-                                                            ?.charAt(0)
-                                                            .toLocaleUpperCase()}
-                                                </div>
+                                                        .toLocaleUpperCase()}
+                                            </div>
                                         </span>
                                     </Dropdown.Trigger>
 
@@ -188,7 +192,9 @@ export default function Authenticated({ user, header, children }) {
                     </header>
 
                     {/* Page Content */}
-                    <main className="p-6 overflow-auto flex-1 ">{children}</main>
+                    <main className="p-6 overflow-auto flex-1 ">
+                        {children}
+                    </main>
                 </div>
             </div>
         </>
