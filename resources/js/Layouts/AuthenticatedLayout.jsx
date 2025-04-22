@@ -11,6 +11,7 @@ import {
 import { useEffect, useState } from "react";
 import { Menu, MenuItem, Sidebar } from "react-pro-sidebar";
 import iconImg from "../../Assest/img/logoIcon.png";
+import { router, usePage } from "@inertiajs/react";
 
 export default function Authenticated({ user, header, children }) {
     const [collapsed, setCollapsed] = useState(false); // Default to collapsed on desktop
@@ -18,6 +19,10 @@ export default function Authenticated({ user, header, children }) {
     const [isMobile, setIsMobile] = useState(
         window.innerWidth < 768 ? true : false
     ); // Check if the screen is mobile size
+
+    const routePrefix =
+        user?.role === "admin" || user?.role === "rh" ? "admin" : "employe";
+    const currentRoute = usePage().props.routeName;
 
     useEffect(() => {
         const handleResize = () => {
@@ -95,19 +100,26 @@ export default function Authenticated({ user, header, children }) {
                         <MenuItem
                             className="my-3 relative group"
                             icon={<LayoutDashboard size={20} />}
-                            active={
-                                window.location.pathname ===
-                                    "/admin/dashboard" ||
-                                window.location.pathname ===
-                                    "/employe/dashboard"
-                            }
+                            active={currentRoute.includes("dashboard")}
+                            onClick={() => {
+                                router.visit(route(`${routePrefix}.dashboard`));
+                            }}
                         >
                             {" "}
                             Dashboard
                         </MenuItem>
-                        <MenuItem className="my-3" icon={<Users size={22} />}>
+                        <MenuItem
+                            className="my-3"
+                            icon={<Users size={22} />}
+                            active={currentRoute.includes("employes")}
+                            onClick={() => {
+                                router.visit(
+                                    route(`${routePrefix}.employes.index`)
+                                );
+                            }}
+                        >
                             {" "}
-                            Employées
+                            Employés
                         </MenuItem>
 
                         <MenuItem
