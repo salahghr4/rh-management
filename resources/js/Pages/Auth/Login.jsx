@@ -44,7 +44,7 @@ export default function Login({ status, canResetPassword }) {
                             onSubmit={submit}
                             className=" lg:w-[70%] xl:w-[60%] 2xl:w-[50%] mx-auto  px-5 "
                         >
-                            <div className="flex flex-col items-center gap-2 text-center mb-10">
+                            <div className="flex flex-col items-center gap-2 text-center mb-8">
                                 <h1 className="text-2xl font-bold text-primary">
                                     Connectez-vous à votre compte
                                 </h1>
@@ -52,6 +52,10 @@ export default function Login({ status, canResetPassword }) {
                                     Entrez votre e-mail ci-dessous pour vous
                                     connecter à votre compte
                                 </p>
+                                <InputError
+                                    message={errors.loginError}
+                                    className="mt-2"
+                                />
                             </div>
                             <div>
                                 <InputLabel htmlFor="email" value="Email" />
