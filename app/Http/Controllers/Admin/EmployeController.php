@@ -1,0 +1,91 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreEmployeRequest;
+use App\Http\Requests\UpdateEmployeRequest;
+use App\Models\User;
+
+class EmployeController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
+    {
+        //
+        return inertia('Admin/Employes/Index', [
+            'employes' => User::all()
+        ]);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        return inertia('Admin/Employes/Create');
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(StoreEmployeRequest $request)
+    {
+        $validated = $request->validated();
+        $validated['password'] = bcrypt($validated['password']);
+        User::create($validated);
+        return redirect()->route('admin.employes.index')->with('success', 'Employé créé avec succès');
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(User $employe)
+    {
+        return inertia('Admin/Employes/Show', [
+            'employe' => $employe
+        ]);
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(User $employe)
+    {
+        return inertia('Admin/Employes/Edit', [
+            'employe' => $employe
+        ]);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(UpdateEmployeRequest $request, User $employe)
+    {
+        $validated = $request->validated();
+
+        // Only hash the password if provided
+        if (!empty($validated['password'])) {
+            $validated['password'] = bcrypt($validated['password']);
+        } else {
+            unset($validated['password']);
+        }
+
+        $employe->update($validated);
+
+        return redirect()->route('admin.employes.index')->with('success', 'Employé mis à jour avec succès');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(User $employe)
+    {
+        // set the active state to false
+        $employe->active = false;
+        $employe->save();
+        return redirect()->route('admin.employes.index')->with('success', 'Employé supprimé avec succès');
+    }
+}

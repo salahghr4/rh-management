@@ -1,9 +1,14 @@
 import Chart from "@/Components/Chart";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link } from "@inertiajs/react";
+<<<<<<< HEAD
 import { DollarSign, Plane, Users, ShoppingCart, UserMinus  , Building } from "lucide-react";
 import { Table,Tag } from "antd";
 import CreativeUserForm from "@/Components/Form";
+=======
+import { Table, Tag } from "antd";
+import { Building, Plane, UserMinus, Users } from "lucide-react";
+>>>>>>> 98c169ca762ca6496ea783eac88bc3cbc895bd0b
 export default function Dashboard({
     auth,
     totalEmployes,
@@ -12,7 +17,7 @@ export default function Dashboard({
     departementCount,
     departmentWithEmployees,
     absenceTypes,
-    employees
+    employees,
 }) {
     console.log("employees:", employees);
     // Ensure department data is properly structured
@@ -46,121 +51,124 @@ export default function Dashboard({
     // console.log("absenceTypeLabels:", absenceTypeLabels);
     // console.log("absenceTypeCounts:", absenceTypeCounts);
     const departementFilters = [
-        ...new Set(employees.map(emp => emp.departement?.nom))
-      ].filter(Boolean).map(depNom => ({
-        text: depNom,
-        value: depNom,
-      }));
-      
-      console.log(departementFilters);
+        ...new Set(employees.map((emp) => emp.departement?.nom)),
+    ]
+        .filter(Boolean)
+        .map((depNom) => ({
+            text: depNom,
+            value: depNom,
+        }));
+
+    console.log(departementFilters);
     const columns = [
         {
             title: "Nom",
             dataIndex: "nom",
             key: "nom",
             sorter: (a, b) => a.nom.localeCompare(b.nom),
-          
-            },
-            {
-                title: "Prenom",
-                dataIndex: "prenom",
-                key: "prenom",
-                sorter: (a, b) => a.prenom.localeCompare(b.prenom),
-              
+        },
+        {
+            title: "Prenom",
+            dataIndex: "prenom",
+            key: "prenom",
+            sorter: (a, b) => a.prenom.localeCompare(b.prenom),
+        },
+        {
+            title: "Email",
+            dataIndex: "email",
+            key: "email",
+            sorter: (a, b) => a.email.localeCompare(b.email),
+        },
+        {
+            title: "Role",
+            dataIndex: "role",
+            key: "role",
+            sorter: (a, b) => a.role.localeCompare(b.role),
+        },
+        {
+            title: "Poste",
+            dataIndex: "poste",
+            key: "poste",
+            sorter: (a, b) => a.poste.localeCompare(b.poste),
+        },
+        {
+            title: "Departement",
+            dataIndex: "departement",
+            key: "departement",
+            filters: departementFilters,
+            onFilter: (value, record) => record.departement === value,
+        },
+        {
+            title: "Status",
+            dataIndex: "status",
+            key: "status",
+            filters: [
+                {
+                    text: "Active",
+                    value: "active",
                 },
                 {
-                    title: "Email",
-                    dataIndex: "email",
-                    key: "email",
-                    sorter: (a, b) => a.email.localeCompare(b.email),
-                  
-                    },
-                    {
-                        title: "Role",
-                        dataIndex: "role",
-                        key: "role",
-                        sorter: (a, b) => a.role.localeCompare(b.role),
-                      
-                        },
-                        {
-                            title: "Poste",
-                            dataIndex: "poste",
-                            key: "poste",
-                            sorter: (a, b) => a.poste.localeCompare(b.poste),
-                          
-                            },
-                            {
-                                title: "Departement",
-                                dataIndex: "departement",
-                                key: "departement",
-                                filters: departementFilters,
-                                onFilter: (value, record) => record.departement === value,
-                              
-                                },
-                                {
-                                    title: "Status",
-                                    dataIndex: "status",
-                                    key: "status",
-                                    render: (status) => (
-                                                <Tag color={status === "active" ? "green" : "red"}>{status}</Tag>
-                                            ),
-                                    },
-                            
-        
+                    text: "Inactive",
+                    value: "inactive",
+                },
+            ],
+            onFilter: (value, record) => record.status.startsWith(value),
+            render: (status) => (
+                <Tag color={status === "active" ? "green" : "red"}>
+                    {status}
+                </Tag>
+            ),
+        },
+
         {
             title: "Date embauche",
             dataIndex: "date_embauche",
             key: "date_embauche",
-            
+
             sorter: (a, b) => a.date_embauche.localeCompare(b.date_embauche),
         },
-        
-        
-        
-        
-        
+
         {
             title: "Salaire",
             dataIndex: "salaire",
             key: "salaire",
             sorter: (a, b) => a.salaire.localeCompare(b.salaire),
-          
-            },
-        
+        },
+
         {
             title: "Telephone",
             dataIndex: "telephone",
             key: "telephone",
             sorter: (a, b) => a.telephone.localeCompare(b.telephone),
-          
-            },
+        },
         {
             title: "Type contrat",
             dataIndex: "type_contrat",
             key: "type_contrat",
             sorter: (a, b) => a.type_contrat.localeCompare(b.type_contrat),
-          
-            },
-            {
-                title: "Adresse",
-                dataIndex: "adresse",
-                key: "adresse",
-                sorter: (a, b) => a.adresse.localeCompare(b.adresse),
-                render: (adresse) => (
-                    <div className="w-20">
-                        <p className="text-ellipsis truncate overflow-hidden">{adresse}</p>
-                    </div>
-                ),
-            },
-            {
-                title: "Joures conges restant",
-                dataIndex: "joures_conges_restant",
-                key: "joures_conges_restant",
-                sorter: (a, b) => a.joures_conges_restant.localeCompare(b.joures_conges_restant),
-              
-                },
+        },
+        {
+            title: "Adresse",
+            dataIndex: "adresse",
+            key: "adresse",
+            sorter: (a, b) => a.adresse.localeCompare(b.adresse),
+            render: (adresse) => (
+                <div className="w-20">
+                    <p className="text-ellipsis truncate overflow-hidden">
+                        {adresse}
+                    </p>
+                </div>
+            ),
+        },
+        {
+            title: "Joures conges restant",
+            dataIndex: "joures_conges_restant",
+            key: "joures_conges_restant",
+            sorter: (a, b) =>
+                a.joures_conges_restant.localeCompare(b.joures_conges_restant),
+        },
     ];
-    
+
     const data = employees.map((employee) => ({
         key: employee.id,
         nom: employee.nom,
@@ -213,8 +221,8 @@ export default function Dashboard({
                             {demandeConges}
                         </p>
                     </div>
-                    <Plane  className="w-12 h-12 text-red-500" />               
-                     </div>
+                    <Plane className="w-12 h-12 text-red-500" />
+                </div>
 
                 <div className="bg-white p-6 rounded-xl shadow-md flex items-center justify-between dark:bg-gray-800">
                     <div>
@@ -225,8 +233,7 @@ export default function Dashboard({
                             {totalAbsence}
                         </p>
                     </div>
-                    <UserMinus  className="w-12 h-12 text-blue-500" />               
-
+                    <UserMinus className="w-12 h-12 text-blue-500" />
                 </div>
 
                 
@@ -240,7 +247,7 @@ export default function Dashboard({
                         </p>
                     </div>
                     <Building className="w-12 h-12 text-green-500" />
-                                    </div>
+                </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 dark:bg-black">
@@ -274,7 +281,7 @@ export default function Dashboard({
 
                 <div className="bg-white p-6 overflow-hidden shadow-sm sm:rounded-lg dark:bg-gray-800">
                     <h2 className="text-center text-2xl mb-5 font-bold">
-                        Total employés par departement
+                        Total absences par departement
                     </h2>
 
                     <Chart
@@ -299,14 +306,35 @@ export default function Dashboard({
                     />
                 </div>
             </div>
-            <div className="bg-white p-6 mt-5 overflow-auto shadow-sm sm:rounded-lg dark:bg-gray-800 w-['80%']" >
+            <div className="bg-white mt-5 overflow-auto shadow-sm sm:rounded-lg dark:bg-gray-800 w-['80%']">
                 <div className="w-full bg-white flex justify-between p-5 rounded-tr-lg rounded-tl-lg">
-                        <h2>Employées</h2>
-                        <Link href="#">Afficher Tous</Link>
+                    <h2 className="font-bold text-lg">Employées</h2>
+                    <Link href="#" className="underline text-blue-500">
+                        Afficher Tous
+                    </Link>
                 </div>
+<<<<<<< HEAD
             <Table dataSource={data} columns={columns} pagination={{ pageSize:5}} />
             </div> */}
             <CreativeUserForm/>
+=======
+                <Table
+                    dataSource={data}
+                    columns={columns}
+                    pagination={{ pageSize: 5 }}
+                    // onRow={(record) => ({
+                    //     onClick: () => {
+                    //         console.log("Row clicked:", record);
+                    //         router.get(
+                    //             route("admin.employees.show", record.key),
+                    //             {
+                    //                 preserveState: true,
+                    //             }
+                    //         );
+                    //     },
+                    // })}
+                />
+            {/* </div> */}
         </AuthenticatedLayout>
     );
 }

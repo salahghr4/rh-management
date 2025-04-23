@@ -16,6 +16,24 @@ class LoginRequest extends FormRequest
      */
     public function authorize(): bool
     {
+        // Check if the user is active
+        if ($this->user()) {
+            if ($this->user()->status === 'inactive') {
+                throw ValidationException::withMessages([
+                    'loginError' => ["Votre compte est inactif. veuillez contacter l'administrateur."],
+                ]);
+            }
+        }
+        // If the user is not authenticated, check if the email is provided
+        if ($this->filled('email')) {
+            // Check if the user exists and is active
+            $user = Auth::getProvider()->retrieveByCredentials(['email' => $this->input('email')]);
+            if ($user && $user->status === 'inactive') {
+                throw ValidationException::withMessages([
+                    'loginError' => ["Votre compte est inactif. veuillez contacter l'administrateur."],
+                ]);
+            }
+        }
         return true;
     }
 
@@ -80,6 +98,6 @@ class LoginRequest extends FormRequest
      */
     public function throttleKey(): string
     {
-        return Str::transliterate(Str::lower($this->string('email')).'|'.$this->ip());
+        return Str::transliterate(Str::lower($this->string('email')) . '|' . $this->ip());
     }
 }

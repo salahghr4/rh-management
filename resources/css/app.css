@@ -17,3 +17,8 @@
   font-size: 1rem;
 
 }
+
+button.ant-btn-variant-solid {
+  background-color: #3b82f6;
+  color: #fff;
+}

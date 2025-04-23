@@ -2,12 +2,10 @@ import Chart from "@/Components/Chart";
 import EmployeeCalendar from "@/Components/EmployeeCalendar";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link } from "@inertiajs/react";
-import { Table, Tag } from "antd";
-import { DollarSign, Package,Clock ,Plane , Users, ShoppingCart, CalendarX  } from "lucide-react";
+import { Table } from "antd";
+import { CalendarX, Clock, Plane, Users } from "lucide-react";
 import { useState } from "react";
-import Calendar from "react-calendar";
-import 'react-calendar/dist/Calendar.css';
-
+import "react-calendar/dist/Calendar.css";
 
 export default function Dashboard({
     auth,
@@ -17,7 +15,7 @@ export default function Dashboard({
     joursConge,
     joursAbsence,
     paisParMois,
-    absences
+    absences,
 }) {
     console.log("employees", employees);
     console.log("totalEmployes", totalEmployes);
@@ -27,22 +25,21 @@ export default function Dashboard({
     console.log("paisParMois", paisParMois);
     console.log("absences", absences);
 
-
     const departementFilters = [
-        ...new Set(employees.map(emp => emp.departement))
-      ].map(dep => ({
+        ...new Set(employees.map((emp) => emp.departement)),
+    ].map((dep) => ({
         text: dep,
         value: dep,
-      }));
+    }));
 
-      const posteFilters = [
-        ...new Set(employees.map(emp => emp.poste))
-      ].map(poste => ({
-        text: poste,
-        value: poste,
-      }));
-      
-      const columns = [
+    const posteFilters = [...new Set(employees.map((emp) => emp.poste))].map(
+        (poste) => ({
+            text: poste,
+            value: poste,
+        })
+    );
+
+    const columns = [
         {
             title: "Nom",
             dataIndex: "nom",
@@ -61,18 +58,12 @@ export default function Dashboard({
             key: "poste",
             filters: posteFilters,
             onFilter: (value, record) => record.poste === value,
-            // filters: [
-            //     { text: "Admin", value: "Admin" },
-            //     { text: "User", value: "User" },
-            // ],
-            // onFilter: (value, record) => record.role === value,
-            },
+        },
         {
             title: "Email",
             dataIndex: "email",
             key: "email",
             sorter: (a, b) => a.email.localeCompare(b.email),
-
         },
         {
             title: "departement",
@@ -81,27 +72,18 @@ export default function Dashboard({
             filters: departementFilters,
             onFilter: (value, record) => record.departement === value,
         },
-        // {
-        //     title: "Status",
-        //     dataIndex: "status",
-        //     key: "status",
-        //     render: (status) => (
-        //         <Tag color={status === "Active" ? "green" : "red"}>{status}</Tag>
-        //     ),
-        //     },
-        ];
+    ];
 
-        const dataSource = employees.map((e) => ({
-            key: e.id,
-            nom: e.nom,
-            prenom: e.prenom,
-            poste: e.poste,
-            email: e.email,
-            departement: e.departement,
-          }));
+    const dataSource = employees.map((e) => ({
+        key: e.id,
+        nom: e.nom,
+        prenom: e.prenom,
+        poste: e.poste,
+        email: e.email,
+        departement: e.departement,
+    }));
 
-          
-          const [valueCalendar, setValueCalendar] = useState(new Date());
+    const [valueCalendar, setValueCalendar] = useState(new Date());
 
     return (
         <AuthenticatedLayout user={auth.user}>
@@ -139,7 +121,7 @@ export default function Dashboard({
                             {demandeConges}
                         </p>
                     </div>
-                    <Plane  className="w-12 h-12 text-red-500" />
+                    <Plane className="w-12 h-12 text-red-500" />
                 </div>
 
                 {/* Total Customers */}
@@ -152,7 +134,7 @@ export default function Dashboard({
                             {joursConge}
                         </p>
                     </div>
-                    <Clock  className="w-12 h-12 text-yellow-500" />
+                    <Clock className="w-12 h-12 text-yellow-500" />
                 </div>
 
                 {/* Traffic Analytics */}
@@ -165,35 +147,46 @@ export default function Dashboard({
                             {joursAbsence}
                         </p>
                     </div>
-                    <CalendarX  className="w-12 h-12 text-green-500" />
+                    <CalendarX className="w-12 h-12 text-green-500" />
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 dark:bg-black">
+            <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 dark:bg-black">
                 {/* Traffic Chart */}
                 <div className="bg-white p-6  overflow-hidden  shadow-sm sm:rounded-lg dark:bg-gray-800">
-                    <h1 className="text-xl mb-8 text-center">Salaire Par Moi</h1>
+                    <h1 className="text-xl mb-8 text-center">
+                        Salaire Par Mois
+                    </h1>
                     <Chart
                         type={"bar"}
                         data={{
                             labels: paisParMois.map((item) =>
-                                new Date(item.date).toLocaleDateString("fr-FR", {
-                                    month: "long",
-                                    year: "numeric",
-                                })
+                                new Date(item.date).toLocaleDateString(
+                                    "fr-FR",
+                                    {
+                                        month: "long",
+                                        year: "numeric",
+                                    }
+                                )
                             ),
                             datasets: [
                                 {
                                     label: "Salaire (DH)",
-                                    data: paisParMois.map((item) => parseFloat(item.montant)),
-                                    backgroundColor: "#4F46E5", // Indigo
+                                    data: paisParMois.map((item) =>
+                                        parseFloat(item.montant)
+                                    ),
+                                    backgroundColor: "#4F46E5",
+                                    // barThickness: 40,
                                 },
                                 {
                                     label: "Prime (DH)",
                                     data: paisParMois.map((item) =>
-                                        item.primes ? parseFloat(item.primes) : 0
+                                        item.primes
+                                            ? parseFloat(item.primes)
+                                            : 0
                                     ),
-                                    backgroundColor: "#ff1a02", // Green
+                                    backgroundColor: "#ff1a02",
+                                    // barThickness: 40,
                                 },
                             ],
                         }}
@@ -216,18 +209,25 @@ export default function Dashboard({
                             ],
                         }}
                     /> */}
-                    <h3 className="text-xl mb-4 text-center">Absence Calendar</h3>
+                    <h3 className="text-xl mb-4 text-center">
+                        Absence Calendar
+                    </h3>
                     <EmployeeCalendar absences={absences} />
-                    {/* <Calendar  value={valueCalendar} onChange={setValueCalendar}/> */}
                 </div>
             </div>
-                  <div className="my-5 w-full">
-                    <div className="w-full bg-white flex justify-between p-5 rounded-tr-lg rounded-tl-lg">
-                            <h2>Employées</h2>
-                            <Link href="#">Afficher Tous</Link>
-                    </div>
-                    <Table dataSource={dataSource} columns={columns} pagination={{ pageSize: 5 }} />
-                  </div>
+            <div className="bg-white mt-5 overflow-auto shadow-sm sm:rounded-lg dark:bg-gray-800 w-['80%']">
+                <div className="w-full bg-white flex justify-between p-5 rounded-tr-lg rounded-tl-lg">
+                    <h2 className="font-bold text-lg">Employées</h2>
+                    <Link href="#" className="underline text-blue-500">
+                        Afficher Tous
+                    </Link>
+                </div>
+                <Table
+                    dataSource={dataSource}
+                    columns={columns}
+                    pagination={{ pageSize: 5 }}
+                />
+            </div>
         </AuthenticatedLayout>
     );
 }
