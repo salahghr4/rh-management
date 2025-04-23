@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\User;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreEmployeRequest;
 use App\Http\Requests\UpdateEmployeRequest;
-use App\Models\User;
 
 class EmployeController extends Controller
 {
@@ -16,7 +16,7 @@ class EmployeController extends Controller
     {
         //
         return inertia('Admin/Employes/Index', [
-            'employes' => User::all()
+            'employes' => User::with('departement')->get()
         ]);
     }
 
@@ -83,8 +83,7 @@ class EmployeController extends Controller
      */
     public function destroy(User $employe)
     {
-        // set the active state to false
-        $employe->active = false;
+        $employe->status = "inactive";
         $employe->save();
         return redirect()->route('admin.employes.index')->with('success', 'Employé supprimé avec succès');
     }

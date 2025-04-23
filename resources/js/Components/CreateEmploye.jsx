@@ -1,24 +1,24 @@
 import { router, usePage } from '@inertiajs/react';
 import { useState } from 'react';
 
-export default function EditForm({employe}) {
+export default function CreateForm() {
   const [activeTab, setActiveTab] = useState('personal');
   const [formData, setFormData] = useState({
-    nom: employe.nom || "",
-    prenom: employe.prenom || "",
-    email: employe.email || "",
-    adresse: employe.adresse || "",
-    telephone: employe.telephone || "",
-    date_embauche: employe.date_embauche || "",
-    poste: employe.poste || "",
-    type_contrat: employe.type_contrat || "CDI",
-    status: employe.status || "active",
-    salaire: employe.salaire || "",
-    role: employe.role || "employe",
-    departement_id: employe.departement_id || "",
-    joures_conges_restant: employe.joures_conges_restant || 18,
-    password: "",
-    password_confirmation: "",
+    nom: '',
+    prenom: '',
+    email: '',
+    adresse: '',
+    telephone: '',
+    date_embauche: '',
+    poste: '',
+    type_contrat: 'CDI',
+    status: 'active',
+    salaire: '',
+    role: 'employe',
+    departement_id: '',
+    joures_conges_restant: 18,
+    password: '',
+    password_confirmation: ''
   });
 
   const [departments, setDepartments] = useState([
@@ -38,7 +38,7 @@ export default function EditForm({employe}) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    router.put(route('admin.employes.update', employe.id), formData, {
+    router.post(route('admin.employes.store'), formData, {
       onSuccess: () => {
         console.log('Form submitted successfully:', formData);
       },
@@ -63,25 +63,21 @@ export default function EditForm({employe}) {
         return false;
     }
   };
-
   const { errors } = usePage().props;
 
   return (
     <div className="min-h-screen  p-6 flex  justify-center">
       <div className="w-full ">
-
-
       {Object.keys(errors).length > 0 && (
-          <div className="mb-4 p-4 bg-red-100 border border-red-400 rounded text-red-700">
-            <p className="font-bold mb-2">Whoooooops Somthing wrong !!!</p>
-            <ul className="list-disc list-inside">
-              {Object.entries(errors).map(([field, message]) => (
-                <li key={field}>{message}</li>
-              ))}
-            </ul>
-          </div>
-        )}
-
+  <div className="mb-4 p-4 bg-red-100 border border-red-400 rounded text-red-700">
+    <p className="font-bold mb-2">Whoooooops Somthing wrong !!!</p>
+    <ul className="list-disc list-inside">
+      {Object.entries(errors).map(([field, message]) => (
+        <li key={field}>{message}</li>
+      ))}
+    </ul>
+  </div>
+)}
         {/* Header with fluid design */}
         {/* <div className="relative mb-8">
           <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-500 transform -skew-y-3 rounded-3xl shadow-lg opacity-20"></div>

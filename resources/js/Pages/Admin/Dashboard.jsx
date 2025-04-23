@@ -1,14 +1,21 @@
 import Chart from "@/Components/Chart";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head, Link } from "@inertiajs/react";
-<<<<<<< HEAD
-import { DollarSign, Plane, Users, ShoppingCart, UserMinus  , Building } from "lucide-react";
-import { Table,Tag } from "antd";
-import CreativeUserForm from "@/Components/Form";
-=======
+import { Head, Link, router } from "@inertiajs/react";
+// <<<<<<< HEAD
+import {
+    DollarSign,
+    Plane,
+    Users,
+    ShoppingCart,
+    UserMinus,
+    Building,
+} from "lucide-react";
 import { Table, Tag } from "antd";
-import { Building, Plane, UserMinus, Users } from "lucide-react";
->>>>>>> 98c169ca762ca6496ea783eac88bc3cbc895bd0b
+import CreativeUserForm from "@/Components/Form";
+// =======
+// import { Table, Tag } from "antd";
+// import { Building, Plane, UserMinus, Users } from "lucide-react";
+// >>>>>>> 98c169ca762ca6496ea783eac88bc3cbc895bd0b
 export default function Dashboard({
     auth,
     totalEmployes,
@@ -191,7 +198,7 @@ export default function Dashboard({
         <AuthenticatedLayout user={auth.user}>
             <Head title="Dashboard" />
 
-            {/* <h2 className="text-2xl m-3 font-bold text-gray-800 animate-fade-in dark:text-white">
+            <h2 className="text-2xl m-3 font-bold text-gray-800 animate-fade-in dark:text-white">
                 Bonjour,{" "}
                 <span className="text-blue-600">
                     {auth.user.nom} {auth.user.prenom}
@@ -236,7 +243,6 @@ export default function Dashboard({
                     <UserMinus className="w-12 h-12 text-blue-500" />
                 </div>
 
-                
                 <div className="bg-white p-6 rounded-xl shadow-md flex items-center justify-between dark:bg-gray-800">
                     <div>
                         <h3 className="text-lg font-semibold text-gray-700 dark:text-white">
@@ -251,7 +257,6 @@ export default function Dashboard({
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 dark:bg-black">
-                
                 <div className="bg-white p-6 overflow-hidden shadow-sm sm:rounded-lg dark:bg-gray-800">
                     <h2 className="text-center text-2xl mb-5 font-bold">
                         Total employés par departement
@@ -277,7 +282,6 @@ export default function Dashboard({
                         }}
                     />
                 </div>
-
 
                 <div className="bg-white p-6 overflow-hidden shadow-sm sm:rounded-lg dark:bg-gray-800">
                     <h2 className="text-center text-2xl mb-5 font-bold">
@@ -313,27 +317,21 @@ export default function Dashboard({
                         Afficher Tous
                     </Link>
                 </div>
-<<<<<<< HEAD
-            <Table dataSource={data} columns={columns} pagination={{ pageSize:5}} />
-            </div> */}
-            <CreativeUserForm/>
-=======
-                <Table
-                    dataSource={data}
-                    columns={columns}
-                    pagination={{ pageSize: 5 }}
-                    // onRow={(record) => ({
-                    //     onClick: () => {
-                    //         console.log("Row clicked:", record);
-                    //         router.get(
-                    //             route("admin.employees.show", record.key),
-                    //             {
-                    //                 preserveState: true,
-                    //             }
-                    //         );
-                    //     },
-                    // })}
-                />
+                {/* <Table dataSource={data} columns={columns} pagination={{ pageSize:5}} /> */}
+            </div>
+            {/* <CreativeUserForm/> */}
+            <Table
+                dataSource={data}
+                columns={columns}
+                pagination={{ pageSize: 5 }}
+                onRow={(record) => ({
+                    onClick: () => {
+                        console.log("Row clicked:", record);
+                        router.visit(route("admin.employes.show", record.key));
+                    },
+                })}
+                rowClassName="cursor-pointer"
+            />
             {/* </div> */}
         </AuthenticatedLayout>
     );
