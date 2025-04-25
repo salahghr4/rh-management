@@ -75,7 +75,7 @@ const Index = ({ auth, employes }) => {
                 {
                     text: "Active",
                     value: "active",
-                },
+                },  
                 {
                     text: "Inactive",
                     value: "inactive",
@@ -163,7 +163,7 @@ const Index = ({ auth, employes }) => {
             <div className="bg-white mt-5 overflow-auto shadow-sm sm:rounded-lg dark:bg-gray-800 w-['80%']">
                 <div className="w-full bg-white flex justify-between p-5 rounded-tr-lg rounded-tl-lg">
                     <h2 className="font-bold text-lg">Employées</h2>
-                    <Link href={route('admin.employes.create') } className="underline text-blue-500">
+                    <Link href={route('admin.employes.create') } className="bg-blue-500 text-white px-5 py-2 rounded-md hover:bg-blue-600">
                         Ajouter Employé
                     </Link>
                 </div>

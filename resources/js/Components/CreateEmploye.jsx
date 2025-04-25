@@ -1,5 +1,5 @@
-import { router, usePage } from '@inertiajs/react';
-import { useState } from 'react';
+import { Link, router, usePage } from '@inertiajs/react';
+import { use, useEffect, useState } from 'react';
 
 export default function CreateForm() {
   const [activeTab, setActiveTab] = useState('personal');
@@ -13,13 +13,14 @@ export default function CreateForm() {
     poste: '',
     type_contrat: 'CDI',
     status: 'active',
-    salaire: '',
+    salaire: '1500',
     role: 'employe',
     departement_id: '',
     joures_conges_restant: 18,
     password: '',
     password_confirmation: ''
   });
+  const { errors } = usePage().props;
 
   const [departments, setDepartments] = useState([
     { id: 1, name: 'IT', icon: '💻' },
@@ -35,6 +36,23 @@ export default function CreateForm() {
       [name]: value
     }));
   };
+
+  // Check if there are any errors set the active tab to the first one the error is in
+  useEffect(() => {
+    console.log(errors);
+    if (errors) {
+      const firstErrorTab = Object.keys(errors).find((key) => {
+        return ['nom', 'prenom', 'email', 'adresse', 'telephone'].includes(key) ;
+      });
+      if (firstErrorTab) {
+        setActiveTab('personal');
+      } else if (Object.keys(errors).some(key => ['date_embauche', 'poste', 'salaire'].includes(key))) {
+        setActiveTab('employment');
+      } else if (Object.keys(errors).some(key => ['departement_id', 'role'].includes(key))) {
+        setActiveTab('admin');
+      }
+    }
+  }, [errors]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -58,48 +76,27 @@ export default function CreateForm() {
       case 'employment':
         return formData.date_embauche && formData.poste && formData.salaire;
       case 'admin':
-        return true; // This tab has default values so it's always "complete"
+        return formData.departement_id && formData.role && formData.joures_conges_restant && formData.password && formData.password_confirmation;
       default:
         return false;
     }
   };
-  const { errors } = usePage().props;
+  
 
   return (
-    <div className="min-h-screen  p-6 flex  justify-center">
-      <div className="w-full ">
-      {Object.keys(errors).length > 0 && (
-  <div className="mb-4 p-4 bg-red-100 border border-red-400 rounded text-red-700">
-    <p className="font-bold mb-2">Whoooooops Somthing wrong !!!</p>
-    <ul className="list-disc list-inside">
-      {Object.entries(errors).map(([field, message]) => (
-        <li key={field}>{message}</li>
-      ))}
-    </ul>
-  </div>
-)}
-        {/* Header with fluid design */}
-        {/* <div className="relative mb-8">
-          <div className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-500 transform -skew-y-3 rounded-3xl shadow-lg opacity-20"></div>
-          <div className="relative text-center py-8">
-            <h1 className="text-4xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-pink-600">
-              User Registration Portal
-            </h1>
-            <p className="mt-2 text-gray-600 max-w-2xl mx-auto">
-              Complete the registration form with the user's information across all categories
-            </p>
-          </div>
-        </div> */}
-
-        {/* Main card with custom shape */}
-        <div className="relative">
-          {/* Background decorative elements */}
-          {/* <div className="absolute top-0 left-0 w-32 h-32 bg-purple-200 rounded-full -ml-10 -mt-10 opacity-50"></div>
-          <div className="absolute bottom-0 right-0 w-40 h-40 bg-pink-200 rounded-full -mr-16 -mb-16 opacity-50"></div>
-          <div className="absolute top-1/2 right-0 w-24 h-24 bg-indigo-200 rounded-full -mr-12 opacity-30"></div>
-           */}
+    <div className="p-6 bg-white flex flex-col rounded-lg shadow-md">
+      <div className='flex justify-between items-center mb-4'>
+        <div>
+          <h1 className="text-2xl font-bold mb-3">Créer un employés</h1>
+          <p className="text-gray-600 mb-4">Veuillez remplir les détails ci-dessous pour créer un nouvel employé.</p>
+        </div>
+        <Link href={route('admin.employes.index')} className="bg-blue-500 text-white px-5 py-2 rounded-md hover:bg-blue-600">
+          Retour à la liste des employés
+        </Link>
+      </div>
+      <div className="relative">
           {/* Main form container */}
-          <div className="relative bg-white  backdrop-filter backdrop-blur-lg bg-opacity-80 rounded-2xl shadow-xl overflow-hidden border border-gray-100">
+          <div className="relative bg-white  backdrop-filter backdrop-blur-lg bg-opacity-80 rounded-2xl overflow-hidden">
             {/* Tab navigation with animated indicator */}
             <div className="relative">
               <div className="flex border-b">
@@ -135,7 +132,7 @@ export default function CreateForm() {
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                       </svg>
                     </span>
-                    <span className="hidden sm:inline font-medium">Employment</span>
+                    <span className="hidden sm:inline font-medium">Emploi</span>
                     {isTabCompleted('employment') && (
                       <span className="ml-2 text-green-500">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -158,7 +155,7 @@ export default function CreateForm() {
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                       </svg>
                     </span>
-                    <span className="hidden sm:inline font-medium">Administrative</span>
+                    <span className="hidden sm:inline font-medium">Administratif</span>
                     {isTabCompleted('admin') && (
                       <span className="ml-2 text-green-500">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -185,52 +182,57 @@ export default function CreateForm() {
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                             </svg>
                           </div>
-                          <h3 className="ml-3 text-lg font-medium text-gray-800">Personal Identity</h3>
+                          <h3 className="ml-3 text-lg font-medium text-gray-800">Identité personnelle</h3>
                         </div>
                         
                         <div className="grid grid-cols-2 gap-4">
                           <div className="col-span-1">
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Nom</label>
+                            <label className={`block text-sm font-medium ${errors.nom ? "text-red-500" : "text-gray-700"} mb-1`}>Nom</label>
                             <input
                               type="text"
                               name="nom"
                               value={formData.nom}
                               onChange={handleChange}
-                              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                              className={`w-full px-4 py-2 border ${errors.nom ? "border-red-500" : "border-gray-300"} rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent`}
                               placeholder="Enter nom"
                             />
+                            {errors.nom && <p className="text-red-500 text-sm mt-1">{errors.nom}</p>}
                           </div>
                           
                           <div className="col-span-1">
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Prénom</label>
+                            <label className={`block text-sm font-medium ${errors.prenom ? "text-red-500" : "text-gray-700"} mb-1`}>Prénom</label>
                             <input
                               type="text"
                               name="prenom"
                               value={formData.prenom}
                               onChange={handleChange}
-                              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                              className={`w-full px-4 py-2 border ${errors.prenom ? "border-red-500" : "border-gray-300"} rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent`}
                               placeholder="Enter prénom"
                             />
+                            {errors.prenom && <p className="text-red-500 text-sm mt-1">{errors.prenom}</p>}
                           </div>
                           
                           <div className="col-span-2">
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                            <div className="relative">
-                              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
-                                  <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
-                                  <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
-                                </svg>
+                            <label className={`block text-sm font-medium ${errors.email ? "text-red-500" : "text-gray-700"} mb-1`}>Email</label>
+                            <div>
+                              <div className='relative'>
+                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+                                    <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+                                  </svg>
+                                </div>
+                                <input
+                                  type="email"
+                                  name="email"
+                                  value={formData.email}
+                                  onChange={handleChange}
+                                  className={`w-full pl-10 pr-4 py-2 border ${errors.email ? "border-red-500" : "border-gray-300"} rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent`}
+                                  placeholder="email@example.com"
+                                />
                               </div>
-                              <input
-                                type="email"
-                                name="email"
-                                value={formData.email}
-                                onChange={handleChange}
-                                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                                placeholder="email@example.com"
-                              />
                             </div>
+                              {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
                           </div>
                         </div>
                       </div>
@@ -244,12 +246,12 @@ export default function CreateForm() {
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
                             </svg>
                           </div>
-                          <h3 className="ml-3 text-lg font-medium text-gray-800">Contact Details</h3>
+                          <h3 className="ml-3 text-lg font-medium text-gray-800"> Coordonnées</h3>
                         </div>
                         
                         <div className="space-y-4">
                           <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Téléphone</label>
+                            <label className={`block text-sm font-medium ${errors.telephone ? "text-red-500" : "text-gray-700"} mb-1`}>Téléphone</label>
                             <div className="relative">
                               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
@@ -261,22 +263,24 @@ export default function CreateForm() {
                                 name="telephone"
                                 value={formData.telephone}
                                 onChange={handleChange}
-                                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                                placeholder="+33 01 23 45 67 89"
+                                className={`w-full pl-10 pr-4 py-2 border ${errors.telephone ? "border-red-500" : "border-gray-300"} rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent`}
+                                placeholder="06 00 00 00 00"
                               />
                             </div>
+                              {errors.telephone && <p className="text-red-500 text-sm mt-1">{errors.telephone}</p>}
                           </div>
                           
                           <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Adresse</label>
+                            <label className={`block text-sm font-medium ${errors.adresse ? "text-red-500" : "text-gray-700"} mb-1`}>Adresse</label>
                             <textarea
                               name="adresse"
                               value={formData.adresse}
                               onChange={handleChange}
                               rows="3"
-                              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                              placeholder="Enter full address"
+                              className={`w-full px-4 py-2 border ${errors.adresse ? "border-red-500" : "border-gray-300"} rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent`}
+                              placeholder="Entrez l'adresse complète"
                             ></textarea>
+                            {errors.adresse && <p className="text-red-500 text-sm mt-1">{errors.adresse}</p>}
                           </div>
                         </div>
                       </div>
@@ -297,31 +301,33 @@ export default function CreateForm() {
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                             </svg>
                           </div>
-                          <h3 className="ml-3 text-lg font-medium text-gray-800">Job Details</h3>
+                          <h3 className="ml-3 text-lg font-medium text-gray-800">Détails du poste</h3>
                         </div>
                         
                         <div className="space-y-4">
                           <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Date d'embauche</label>
+                            <label className={`block text-sm font-medium ${errors.date_embauche ? "text-red-500" : "text-gray-700"} mb-1`}>Date d'embauche</label>
                             <input
                               type="date"
                               name="date_embauche"
-                              value={formData.date_embauche}
+                              value={formData.date_embauche || new Date().toISOString().split('T')[0]}
                               onChange={handleChange}
-                              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                              className={`w-full px-4 py-2 border ${errors.nom ? "border-red-500" : "border-gray-300"} rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent`}
                             />
+                            {errors.date_embauche && <p className="text-red-500 text-sm mt-1">{errors.date_embauche}</p>}
                           </div>
                           
                           <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Poste</label>
+                            <label className={`block text-sm font-medium ${errors.telephone ? "text-red-500" : "text-gray-700"} mb-1`}>Poste</label>
                             <input
                               type="text"
                               name="poste"
                               value={formData.poste}
                               onChange={handleChange}
-                              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
-                              placeholder="Job title"
+                              className={`w-full px-4 py-2 border ${errors.poste ? "border-red-500" : "border-gray-300"} rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent`}
+                              placeholder="Titre d'emploi"
                             />
+                            {errors.poste && <p className="text-red-500 text-sm mt-1">{errors.poste}</p>}
                           </div>
                           
                           <div className="flex space-x-4">
@@ -352,26 +358,21 @@ export default function CreateForm() {
                                   <span>CDD</span>
                                 </label>
                               </div>
+                              {errors.type_contrat && <p className="text-red-500 text-sm mt-1">{errors.type_contrat}</p>}
                             </div>
                             
                             <div className="flex-1">
-                              <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
-                              <div className="relative">
+                              <label className={`block text-sm font-medium ${errors.status ? "text-red-500" : "text-gray-700"} mb-1`}>Status</label>
                                 <select
                                   name="status"
                                   value={formData.status}
                                   onChange={handleChange}
-                                  className="block w-full px-4 py-2 border border-gray-300 rounded-lg appearance-none focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                                  className={`block w-full px-4 py-2 border ${errors.status ? "border-red-500" : "border-gray-300"} rounded-lg appearance-none focus:ring-2 focus:ring-pink-500 focus:border-transparent`}
                                 >
                                   <option value="active">Active</option>
                                   <option value="inactive">Inactive</option>
                                 </select>
-                                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                                  <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                    <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                                  </svg>
-                                </div>
-                              </div>
+                              {errors.status && <p className="text-red-500 text-sm mt-1">{errors.status}</p>}
                             </div>
                           </div>
                         </div>
@@ -391,10 +392,10 @@ export default function CreateForm() {
                         
                         <div className="space-y-4">
                           <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Salaire</label>
+                            <label className={`block text-sm font-medium ${errors.salaire ? "text-red-500" : "text-gray-700"} mb-1`}>Salaire</label>
                             <div className="relative mt-1 rounded-md shadow-sm">
                               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <span className="text-gray-500 sm:text-sm">€</span>
+                                <span className="text-gray-500 sm:text-sm">DH</span>
                               </div>
                               <input
                                 type="number"
@@ -402,13 +403,14 @@ export default function CreateForm() {
                                 value={formData.salaire}
                                 onChange={handleChange}
                                 step="0.01"
-                                className="w-full pl-8 pr-12 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                                className={`w-full pl-10 pr-12 py-2 border ${errors.salaire ? "border-red-500" : "border-gray-300"} rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent`}
                                 placeholder="0.00"
                               />
                               <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
                                 <span className="text-gray-500 sm:text-sm">/mois</span>
                               </div>
                             </div>
+                            {errors.salaire && <p className="text-red-500 text-sm mt-1">{errors.salaire}</p>}
                           </div>
                           
                           <div>
@@ -425,17 +427,18 @@ export default function CreateForm() {
                                 className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
                               />
                               <div className="flex justify-between text-xs text-gray-500 mt-1">
-                                <span>€1,500</span>
-                                <span>€10,000</span>
+                                <span>1,500 DH</span>
+                                <span>10,000 DH</span>
                               </div>
                             </div>
                           </div>
                           
                           <div className="mt-8 pt-4 border-t border-gray-200">
                             <div className="flex justify-between text-sm">
-                              <span className="font-medium text-gray-500">Annual Total:</span>
+                              <span className="font-medium text-gray-500">Total annuel :</span>
                               <span className="font-bold text-gray-800">
-                                €{formData.salaire ? (parseFloat(formData.salaire) * 12).toLocaleString('fr-FR') : '0'}
+                                {formData.salaire ? (parseFloat(formData.salaire) * 12).toLocaleString('fr-FR') : '0'}
+                                DH
                               </span>
                             </div>
                           </div>
@@ -458,49 +461,42 @@ export default function CreateForm() {
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
                             </svg>
                           </div>
-                          <h3 className="ml-3 text-lg font-medium text-gray-800">Department & Role</h3>
+                          <h3 className="ml-3 text-lg font-medium text-gray-800">Département & Rôle</h3>
                         </div>
                         
                         <div className="space-y-4">
                           <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Department</label>
-                            <div className="grid grid-cols-2 gap-3">
-                              {departments.map(dept => (
-                                <label 
-                                  key={dept.id}
-                                  className={`
-                                    flex items-center p-3 border rounded-lg cursor-pointer hover:bg-indigo-50 transition-all
-                                    ${formData.departement_id === dept.id.toString() ? 'bg-indigo-50 border-indigo-300 text-indigo-700' : 'border-gray-300 text-gray-700'}
-                                  `}
-                                >
-                                  <input
-                                    type="radio"
-                                    name="departement_id"
-                                    value={dept.id}
-                                    checked={formData.departement_id === dept.id.toString()}
-                                    onChange={handleChange}
-                                    className="sr-only"
-                                  />
-                                  <span className="mr-2 text-xl">{dept.icon}</span>
-                                  <span>{dept.name}</span>
-                                </label>
-                              ))}
+                            <label className={`block text-sm font-medium ${errors.departement_id ? "text-red-500" : "text-gray-700"} mb-1`}>Departement</label>
+                            <div>
+                              <select
+                                name="departement_id"
+                                value={formData.departement_id}
+                                onChange={handleChange}
+                                className={`block w-full px-4 py-2 border ${errors.departement_id ? "border-red-500" : "border-gray-300"} rounded-lg appearance-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent`}
+                              >
+                                {departments.map(dept => (
+                                  <option key={dept.id} value={dept.id}>
+                                    {dept.name}
+                                  </option>
+                                ))}
+                              </select>
                             </div>
+                            {errors.departement_id && <p className="text-red-500 text-sm mt-1">{errors.departement_id}</p>}
                           </div>
                           
                           <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Role</label>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Rôle</label>
                             <div className="relative">
                               <select
                                 name="role"
                                 value={formData.role}
                                 onChange={handleChange}
-                                className="block w-full px-4 py-2 border border-gray-300 rounded-lg appearance-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                                className={`block w-full px-4 py-2 border ${errors.role ? "border-red-500" : "border-gray-300"} rounded-lg appearance-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent`}
                               >
+                                <option value="rh">RH</option>
                                 <option value="employe">Employé</option>
                                 <option value="manager">Manager</option>
                                 <option value="admin">Admin</option>
-                                <option value="super_admin">Super Admin</option>
                               </select>
                               <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                                 <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -521,43 +517,44 @@ export default function CreateForm() {
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                             </svg>
                           </div>
-                          <h3 className="ml-3 text-lg font-medium text-gray-800">Access & Security</h3>
+                          <h3 className="ml-3 text-lg font-medium text-gray-800">Accès & sécurité</h3>
                         </div>
                         
                         <div className="space-y-4">
                           <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                            <label className={`block text-sm font-medium ${errors.password ? "text-red-500" : "text-gray-700"} mb-1`}>Mot de passe</label>
                             <div className="relative">
                               <input
                                 type="password"
                                 name="password"
                                 value={formData.password}
                                 onChange={handleChange}
-                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                                placeholder="Set a secure password"
+                                className={`w-full px-4 py-2 border ${errors.password ? "border-red-500" : "border-gray-300"} rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent`}
+                                placeholder="Définir un mot de passe sécurisé"
                               />
+                              {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
                             </div>
                           </div>
                           
                           <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
+                            <label className={`block text-sm font-medium ${errors.password ? "text-red-500" : "text-gray-700"} mb-1`}>Confirmer Mot de passe</label>
                             <div className="relative">
                               <input
                                 type="password"
                                 name="password_confirmation"
                                 value={formData.password_confirmation}
                                 onChange={handleChange}
-                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                                placeholder="Confirm password"
+                                className={`w-full px-4 py-2 border ${errors.password ? "border-red-500" : "border-gray-300"} rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent`}
+                                placeholder="Confirmez le mot de passe"
                               />
                             </div>
                             {formData.password && formData.password_confirmation && formData.password !== formData.password_confirmation && (
-                              <p className="mt-1 text-sm text-red-500">Passwords do not match</p>
+                              <p className="mt-1 text-sm text-red-500">Les mots de passe ne correspondent pas</p>
                             )}
                           </div>
                           
                           <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Jours de congés restants</label>
+                            <label className={`block text-sm font-medium ${errors.joures_conges_restant ? "text-red-500" : "text-gray-700"} mb-1`}>Jours de congés restants</label>
                             <div className="px-2">
                               <input
                                 type="range"
@@ -571,9 +568,10 @@ export default function CreateForm() {
                               />
                               <div className="flex justify-between text-xs text-gray-500 mt-1">
                                 <span>0 jours</span>
-                                <span className="font-medium text-indigo-600 text-center">{formData.joures_conges_restant} jours</span>
+                                <span className={`font-medium ${errors.joures_conges_restant ?  "text-red-500": "text-indigo-600"} text-center`}>{formData.joures_conges_restant} jours</span>
                                 <span>30 jours</span>
                               </div>
+                              {errors.joures_conges_restant && <p className="text-red-500 text-sm mt-1">{errors.joures_conges_restant}</p>}
                             </div>
                           </div>
                         </div>
@@ -596,7 +594,7 @@ export default function CreateForm() {
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                         </svg>
-                        Previous
+                        Précédent
                       </span>
                     </button>
                   )}
@@ -608,7 +606,7 @@ export default function CreateForm() {
                       className="px-6 py-2 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-lg shadow-md hover:from-indigo-600 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                     >
                       <span className="flex items-center">
-                        Next
+                      Suivant
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                         </svg>
@@ -626,7 +624,7 @@ export default function CreateForm() {
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                       </svg>
-                      Submit Registration
+                      Soumettre la creation
                     </span>
                   </button>
                 )}
@@ -635,6 +633,5 @@ export default function CreateForm() {
           </div>
         </div>
       </div>
-    </div>
-  );
+    );
 }
