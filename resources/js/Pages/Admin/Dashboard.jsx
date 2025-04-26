@@ -1,8 +1,21 @@
 import Chart from "@/Components/Chart";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head, Link } from "@inertiajs/react";
+import { Head, Link, router } from "@inertiajs/react";
+// <<<<<<< HEAD
+import {
+    DollarSign,
+    Plane,
+    Users,
+    ShoppingCart,
+    UserMinus,
+    Building,
+} from "lucide-react";
 import { Table, Tag } from "antd";
-import { Building, Plane, UserMinus, Users } from "lucide-react";
+import CreativeUserForm from "@/Components/Form";
+// =======
+// import { Table, Tag } from "antd";
+// import { Building, Plane, UserMinus, Users } from "lucide-react";
+// >>>>>>> 98c169ca762ca6496ea783eac88bc3cbc895bd0b
 export default function Dashboard({
     auth,
     totalEmployes,
@@ -140,6 +153,18 @@ export default function Dashboard({
             dataIndex: "type_contrat",
             key: "type_contrat",
             sorter: (a, b) => a.type_contrat.localeCompare(b.type_contrat),
+            render: (type_contrat) => (
+                <Tag
+                    color={type_contrat === "CDD" ? "blue" : "purple"}
+                    title={
+                        type_contrat === "CDD"
+                            ? "Contrat à durée déterminée"
+                            : "Contrat à durée indéterminée"
+                    }
+                >
+                    {type_contrat}
+                </Tag>
+            ),
         },
         {
             title: "Adresse",
@@ -194,7 +219,6 @@ export default function Dashboard({
             </h2>
 
             <div className="grid grid-cols-1 mb-5 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                {/* Total Employees */}
                 <div className="bg-white p-6 rounded-xl shadow-md flex items-center justify-between dark:bg-gray-800">
                     <div>
                         <h3 className="text-lg font-semibold text-gray-700 dark:text-white">
@@ -207,7 +231,6 @@ export default function Dashboard({
                     <Users className="w-12 h-12 text-yellow-500" />
                 </div>
 
-                {/* Leave Requests */}
                 <div className="bg-white p-6 rounded-xl shadow-md flex items-center justify-between dark:bg-gray-800">
                     <div>
                         <h3 className="text-lg font-semibold text-gray-700 dark:text-white">
@@ -220,7 +243,6 @@ export default function Dashboard({
                     <Plane className="w-12 h-12 text-red-500" />
                 </div>
 
-                {/* Remaining Leave Days */}
                 <div className="bg-white p-6 rounded-xl shadow-md flex items-center justify-between dark:bg-gray-800">
                     <div>
                         <h3 className="text-lg font-semibold text-gray-700 dark:text-white">
@@ -233,7 +255,6 @@ export default function Dashboard({
                     <UserMinus className="w-12 h-12 text-blue-500" />
                 </div>
 
-                {/* Department Count */}
                 <div className="bg-white p-6 rounded-xl shadow-md flex items-center justify-between dark:bg-gray-800">
                     <div>
                         <h3 className="text-lg font-semibold text-gray-700 dark:text-white">
@@ -248,7 +269,6 @@ export default function Dashboard({
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 dark:bg-black">
-                {/* Employees per Department Chart */}
                 <div className="bg-white p-6 overflow-hidden shadow-sm sm:rounded-lg dark:bg-gray-800">
                     <h2 className="text-center text-2xl mb-5 font-bold">
                         Total employés par departement
@@ -275,7 +295,6 @@ export default function Dashboard({
                     />
                 </div>
 
-                {/* Absences per Type Chart */}
                 <div className="bg-white p-6 overflow-hidden shadow-sm sm:rounded-lg dark:bg-gray-800">
                     <h2 className="text-center text-2xl mb-5 font-bold">
                         Total absences par departement
@@ -306,27 +325,26 @@ export default function Dashboard({
             <div className="bg-white mt-5 overflow-auto shadow-sm sm:rounded-lg dark:bg-gray-800 w-['80%']">
                 <div className="w-full bg-white flex justify-between p-5 rounded-tr-lg rounded-tl-lg">
                     <h2 className="font-bold text-lg">Employées</h2>
-                    <Link href="#" className="underline text-blue-500">
+                    <Link href={route('admin.employes.index')} className="underline text-blue-500">
                         Afficher Tous
                     </Link>
                 </div>
-                <Table
-                    dataSource={data}
-                    columns={columns}
-                    pagination={{ pageSize: 5 }}
-                    // onRow={(record) => ({
-                    //     onClick: () => {
-                    //         console.log("Row clicked:", record);
-                    //         router.get(
-                    //             route("admin.employees.show", record.key),
-                    //             {
-                    //                 preserveState: true,
-                    //             }
-                    //         );
-                    //     },
-                    // })}
-                />
+                {/* <Table dataSource={data} columns={columns} pagination={{ pageSize:5}} /> */}
             </div>
+            {/* <CreativeUserForm/> */}
+            <Table
+                dataSource={data}
+                columns={columns}
+                pagination={{ pageSize: 5 }}
+                onRow={(record) => ({
+                    onClick: () => {
+                        console.log("Row clicked:", record);
+                        router.visit(route("admin.employes.show", record.key));
+                    },
+                })}
+                rowClassName="cursor-pointer"
+            />
+            {/* </div> */}
         </AuthenticatedLayout>
     );
 }
