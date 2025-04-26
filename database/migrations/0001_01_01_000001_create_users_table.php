@@ -22,7 +22,7 @@ return new class extends Migration
             $table->date('date_embauche');
             $table->string('poste');
             $table->enum('type_contrat', ['CDI', 'CDD'])->default('CDI');
-            $table->enum('status', ['active', 'inactive'])->default('active');
+            $table->enum('status', ['actif', 'inactif'])->default('actif');
             $table->decimal('salaire', 8, 2);
             $table->enum('role', ['admin', 'employe', 'rh', 'manager'])->default('employe');
             $table->foreignId('departement_id')->nullable()->constrained('departements')->onDelete('set null');

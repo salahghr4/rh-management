@@ -1,6 +1,6 @@
 import { Link, router, usePage } from "@inertiajs/react";
 import { ArrowLeft } from "lucide-react";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function CreateForm({ departements }) {
   const [activeTab, setActiveTab] = useState("personal");
@@ -13,7 +13,7 @@ export default function CreateForm({ departements }) {
     date_embauche: new Date().toISOString().split("T")[0],
     poste: "",
     type_contrat: "CDI",
-    status: "active",
+    status: "actif",
     salaire: "1500",
     role: "employe",
     departement_id: "",
@@ -21,7 +21,6 @@ export default function CreateForm({ departements }) {
     password: "",
     password_confirmation: "",
   });
-  console.log(formData);
 
   const { errors } = usePage().props;
 
@@ -100,14 +99,13 @@ export default function CreateForm({ departements }) {
     <div className="p-6 bg-white flex flex-col rounded-lg shadow-md">
       <div className="flex justify-between items-center mb-4">
         <div className="space-y-4">
-          <div>
-            <Link
-              href={route("admin.employes.index")}
-              className="flex items-center text-gray-600 hover:text-blue-600 text-sm font-medium"
-            >
-              <ArrowLeft className="h-4 w-4 mr-1" /> Retour
-            </Link>
-          </div>
+          <Link
+            href={route("admin.employes.index")}
+            className="w-fit flex items-center text-gray-600 hover:text-blue-600 text-sm font-medium"
+          >
+            <ArrowLeft className="h-4 w-4 mr-1" /> Retour
+          </Link>
+
           <div>
             <h1 className="text-2xl font-bold mb-1">Créer un employés</h1>
             <p className="text-gray-600">
@@ -555,7 +553,9 @@ export default function CreateForm({ departements }) {
                             value={formData.date_embauche}
                             onChange={handleChange}
                             className={`w-full px-4 py-2 border ${
-                              errors.date_embauche ? "border-red-500" : "border-gray-300"
+                              errors.date_embauche
+                                ? "border-red-500"
+                                : "border-gray-300"
                             } rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent`}
                           />
                           {errors.date_embauche && (
@@ -661,8 +661,8 @@ export default function CreateForm({ departements }) {
                                   : "border-gray-300"
                               } rounded-lg appearance-none focus:ring-2 focus:ring-pink-500 focus:border-transparent`}
                             >
-                              <option value="active">Active</option>
-                              <option value="inactive">Inactive</option>
+                              <option value="actif">Actif</option>
+                              <option value="inactif">Inactif</option>
                             </select>
                             {errors.status && (
                               <p className="text-red-500 text-sm mt-1">

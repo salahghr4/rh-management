@@ -1,7 +1,8 @@
 <?php
 
-use App\Http\Controllers\Admin\EmployeController;
+use App\Http\Controllers\Admin\EmployeController as AdminEmployeController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Employe\EmployeController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -13,11 +14,13 @@ Route::get('/', function () {
 
 Route::prefix('admin')->middleware(['auth', 'checkRole:admin,rh'])->name('admin.')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'admin'])->name('dashboard');
-    Route::resource('employes', EmployeController::class)->names('employes');
+    Route::resource('employes', AdminEmployeController::class)->names('employes');
+    Route::put('/employes/{employe}/activer', [AdminEmployeController::class, 'activer'])->name('employes.activer');
 });
 
 Route::prefix('employe')->middleware(['auth', 'checkRole:employe,manager'])->name('employe.')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'employe'])->name('dashboard');
+    Route::resource('employes', EmployeController::class)->only('index')->names('employes');
 });
 
 Route::middleware('auth')->group(function () {

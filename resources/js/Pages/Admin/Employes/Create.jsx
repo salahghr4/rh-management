@@ -5,7 +5,7 @@ import { Head } from "@inertiajs/react";
 const Create = ({ auth, departements }) => {
     return (
         <AuthenticatedLayout user={auth.user}>
-            <Head title="Create Employes" />
+            <Head title="Créer un employé" />
             <CreateForm  departements={departements}/>
         </AuthenticatedLayout>
     );

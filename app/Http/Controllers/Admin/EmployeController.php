@@ -90,7 +90,17 @@ class EmployeController extends Controller
      */
     public function destroy(User $employe)
     {
-        $employe->status = "inactive";
+        $employe->status = "inactif";
+        $employe->save();
+        return redirect()->route('admin.employes.index')->with('success', 'Employé supprimé avec succès');
+    }
+
+    /**
+     * Activer the specified resource in storage.
+     */
+    public function activer(User $employe)
+    {
+        $employe->status = "actif";
         $employe->save();
         return redirect()->route('admin.employes.index')->with('success', 'Employé supprimé avec succès');
     }

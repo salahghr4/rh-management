@@ -34,7 +34,7 @@ class UserFactory extends Factory
             'date_embauche' => fake()->dateTimeBetween('-8 years', 'now')->format('Y-m-d'),
             'poste' => fake()->jobTitle(),
             'type_contrat' => fake()->randomElement(['CDI', 'CDD']),
-            'status' => 'active',
+            'status' => 'actif',
             'salaire' => fake()->randomFloat(2, 4000, 30000), // Salaire entre 4000 et 30,000
             'role' => fake()->randomElement(['admin', 'employe', 'rh', 'manager']),
             'departement_id' => Departement::inRandomOrder()->first()->id ?? Departement::factory(),
