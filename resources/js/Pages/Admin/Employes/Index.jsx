@@ -17,7 +17,7 @@ const Index = ({ auth, employes }) => {
     const handleDeleteEmploye = (e, id) => {
         e.preventDefault();
         e.stopPropagation();
-        router.delete(route('admin.employes.destroy', id), {
+        router.delete(route("admin.employes.destroy", id), {
             preserveScroll: true,
             onSuccess: () => {
                 // optional: show a toast or reload data
@@ -25,7 +25,7 @@ const Index = ({ auth, employes }) => {
             },
             onError: (errors) => {
                 console.error(errors);
-            }
+            },
         });
     };
 
@@ -75,7 +75,7 @@ const Index = ({ auth, employes }) => {
                 {
                     text: "Active",
                     value: "active",
-                },  
+                },
                 {
                     text: "Inactive",
                     value: "inactive",
@@ -108,6 +108,18 @@ const Index = ({ auth, employes }) => {
             dataIndex: "type_contrat",
             key: "type_contrat",
             sorter: (a, b) => a.type_contrat.localeCompare(b.type_contrat),
+            render: (type_contrat) => (
+                <Tag
+                    color={type_contrat === "CDD" ? "blue" : "purple"}
+                    title={
+                        type_contrat === "CDD"
+                            ? "Contrat à durée déterminée"
+                            : "Contrat à durée indéterminée"
+                    }
+                >
+                    {type_contrat}
+                </Tag>
+            ),
         },
         {
             title: "Joures conges restant",
@@ -127,14 +139,14 @@ const Index = ({ auth, employes }) => {
                         onClick={(e) => e.stopPropagation()}
                         title="Editer"
                     >
-                         <Edit size={20} color="orange" />
+                        <Edit size={20} color="orange" />
                     </Link>
                     <button
                         onClick={(e) => handleDeleteEmploye(e, record.key)}
                         className="text-red-500 me-2 hover:text-red-700"
                         title="Supprimer"
                     >
-                         <Trash size={20} />
+                        <Trash size={20} />
                     </button>
                 </div>
             ),
@@ -150,7 +162,7 @@ const Index = ({ auth, employes }) => {
         status: employee.status,
         adresse: employee.adresse,
         date_embauche: employee.date_embauche,
-        departement: employee.departement.nom,
+        departement: employee.departement?.nom,
         joures_conges_restant: employee.joures_conges_restant,
         poste: employee.poste,
         salaire: employee.salaire,
@@ -163,23 +175,26 @@ const Index = ({ auth, employes }) => {
             <div className="bg-white mt-5 overflow-auto shadow-sm sm:rounded-lg dark:bg-gray-800 w-['80%']">
                 <div className="w-full bg-white flex justify-between p-5 rounded-tr-lg rounded-tl-lg">
                     <h2 className="font-bold text-lg">Employées</h2>
-                    <Link href={route('admin.employes.create') } className="bg-blue-500 text-white px-5 py-2 rounded-md hover:bg-blue-600">
+                    <Link
+                        href={route("admin.employes.create")}
+                        className="bg-blue-500 text-white px-5 py-2 rounded-md hover:bg-blue-600"
+                    >
                         Ajouter Employé
                     </Link>
                 </div>
-            <Table 
-            dataSource={data}
-            columns={columns}
-            pagination={{ pageSize:10 }}
-            onRow={(record) => ({
-                onClick: (e) => {
-                    console.log("Row clicked:", record);
-                    router.visit(route("admin.employes.show", record.key));
-                },
-            })}
-            rowClassName="cursor-pointer"
-                        
-            />
+                <Table
+                    dataSource={data}
+                    columns={columns}
+                    pagination={{ pageSize: 10 }}
+                    onRow={(record) => ({
+                        onClick: () => {
+                            router.visit(
+                                route("admin.employes.show", record.key)
+                            );
+                        },
+                    })}
+                    rowClassName="cursor-pointer"
+                />
             </div>
         </AuthenticatedLayout>
     );

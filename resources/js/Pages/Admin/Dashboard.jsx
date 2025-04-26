@@ -153,6 +153,18 @@ export default function Dashboard({
             dataIndex: "type_contrat",
             key: "type_contrat",
             sorter: (a, b) => a.type_contrat.localeCompare(b.type_contrat),
+            render: (type_contrat) => (
+                <Tag
+                    color={type_contrat === "CDD" ? "blue" : "purple"}
+                    title={
+                        type_contrat === "CDD"
+                            ? "Contrat à durée déterminée"
+                            : "Contrat à durée indéterminée"
+                    }
+                >
+                    {type_contrat}
+                </Tag>
+            ),
         },
         {
             title: "Adresse",

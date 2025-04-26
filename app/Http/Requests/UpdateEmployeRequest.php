@@ -32,7 +32,7 @@ class UpdateEmployeRequest extends FormRequest
             'poste' => ['required', 'string', 'max:255'],
             'type_contrat' => ['required', Rule::in(['CDI', 'CDD'])],
             'status' => ['required', Rule::in(['active', 'inactive'])],
-            'salaire' => ['required', 'numeric', 'min:0'],
+            'salaire' => ['required', 'numeric', 'min:1500'],
             'role' => ['required', Rule::in(['admin', 'employe', 'rh', 'manager'])],
             'departement_id' => ['nullable', 'exists:departements,id'],
             'joures_conges_restant' => ['required', 'integer', 'min:0', 'max:18'],

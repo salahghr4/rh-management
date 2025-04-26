@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreEmployeRequest;
 use App\Http\Requests\UpdateEmployeRequest;
+use App\Models\Departement;
 
 class EmployeController extends Controller
 {
@@ -25,7 +26,9 @@ class EmployeController extends Controller
      */
     public function create()
     {
-        return inertia('Admin/Employes/Create');
+        return inertia('Admin/Employes/Create', [
+            'departements' => Departement::all()
+        ]);
     }
 
     /**
@@ -44,6 +47,8 @@ class EmployeController extends Controller
      */
     public function show(User $employe)
     {
+        // get the employe with the departement
+        $employe = User::with('departement')->find($employe->id);
         return inertia('Admin/Employes/Show', [
             'employe' => $employe
         ]);
@@ -54,8 +59,10 @@ class EmployeController extends Controller
      */
     public function edit(User $employe)
     {
+        $employe = User::with('departement')->find($employe->id);
         return inertia('Admin/Employes/Edit', [
-            'employe' => $employe
+            'employe' => $employe,
+            'departements' => Departement::all()
         ]);
     }
 
@@ -75,7 +82,7 @@ class EmployeController extends Controller
 
         $employe->update($validated);
 
-        return redirect()->route('admin.employes.index')->with('success', 'Employé mis à jour avec succès');
+        return redirect()->route('admin.employes.show', $employe->id)->with('success', 'Employé mis à jour avec succès');
     }
 
     /**
