@@ -175,36 +175,27 @@ export default function Dashboard({
 
         {/* Sales Chart */}
         <div className="bg-white p-6 overflow-hidden shadow-sm sm:rounded-lg dark:bg-gray-800  ">
-          {/* <ReactCalendar /> */}
-          {/* <Chart
-                        type={"line"}
-                        data={{
-                            labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
-                            datasets: [
-                                {
-                                    label: "Sales",
-                                    data: [500, 700, 800, 1200, 1500, 1700],
-                                    borderColor: "#4F46E5",
-                                },
-                            ],
-                        }}
-                    /> */}
           <h3 className="text-xl mb-4 text-center">Absence Calendar</h3>
           <EmployeeCalendar absences={absences} />
         </div>
       </div>
-      <div className="bg-white mt-5 overflow-auto shadow-sm sm:rounded-lg dark:bg-gray-800 w-['80%']">
+      <div className="bg-white mt-5 shadow-sm sm:rounded-lg dark:bg-gray-800 w-['80%']">
         <div className="w-full bg-white flex justify-between p-5 rounded-tr-lg rounded-tl-lg">
           <h2 className="font-bold text-lg">Employées</h2>
-          <Link href="#" className="underline text-blue-500">
+          <Link
+            href={route("employe.employes.index")}
+            className="underline text-blue-500"
+          >
             Afficher Tous
           </Link>
         </div>
-        <Table
-          dataSource={dataSource}
-          columns={columns}
-          pagination={{ pageSize: 5 }}
-        />
+        <div className="overflow-x-auto">
+          <Table
+            dataSource={dataSource}
+            columns={columns}
+            pagination={{ pageSize: 5 }}
+          />
+        </div>
       </div>
     </AuthenticatedLayout>
   );

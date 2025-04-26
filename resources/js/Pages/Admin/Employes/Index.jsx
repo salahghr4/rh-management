@@ -211,7 +211,7 @@ const Index = ({ auth, employes }) => {
   }));
   return (
     <AuthenticatedLayout user={auth.user}>
-      <Head title="Employe" />
+      <Head title="Employés" />
       <div className="bg-white mt-5 overflow-auto shadow-sm sm:rounded-lg dark:bg-gray-800 w-['80%']">
         <div className="w-full bg-white flex justify-between p-5 rounded-tr-lg rounded-tl-lg">
           <h2 className="font-bold text-lg">Employées</h2>

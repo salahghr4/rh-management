@@ -4,7 +4,6 @@ import { Head, Link, router } from "@inertiajs/react";
 import { Table, Tag } from "antd";
 import { Building, Plane, UserMinus, Users } from "lucide-react";
 
-
 export default function Dashboard({
   auth,
   totalEmployes,
@@ -14,6 +13,8 @@ export default function Dashboard({
   departmentWithEmployees,
   absenceTypes,
   employees,
+  totalCDD,
+  totalCDI,
 }) {
   // Ensure department data is properly structured
   const departmentData = Array.isArray(departmentWithEmployees)
@@ -243,18 +244,18 @@ export default function Dashboard({
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 dark:bg-black">
-        <div className="bg-white p-6 overflow-hidden shadow-sm sm:rounded-lg dark:bg-gray-800">
-          <h2 className="text-center text-2xl mb-5 font-bold">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 dark:bg-black">
+        <div className="bg-white p-6  overflow-hidden  shadow-sm sm:rounded-lg dark:bg-gray-800">
+          <h1 className="text-xl mb-8 text-center font-bold">
             Total employés par departement
-          </h2>
+          </h1>
           <Chart
-            type="pie"
+            type={"bar"}
             data={{
               labels: departmentLabels,
               datasets: [
                 {
-                  label: "Employés par département",
+                  label: "Total employés",
                   data: departmentEmployeeCounts,
                   backgroundColor: [
                     "#FF6384",
@@ -269,35 +270,55 @@ export default function Dashboard({
             }}
           />
         </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 dark:bg-black">
+          <div className="bg-white p-6 overflow-hidden shadow-sm sm:rounded-lg dark:bg-gray-800">
+            <h2 className="text-center text-xl mb-5 font-bold">
+              Total employés par type de contrat
+            </h2>
+            <Chart
+              type="pie"
+              data={{
+                labels: ["CDD", "CDI"],
+                datasets: [
+                  {
+                    label: "Employés par type de contrat",
+                    data: [totalCDD, totalCDI],
+                    backgroundColor: ["#FF6384", "#36A2EB"],
+                  },
+                ],
+              }}
+            />
+          </div>
 
-        <div className="bg-white p-6 overflow-hidden shadow-sm sm:rounded-lg dark:bg-gray-800">
-          <h2 className="text-center text-2xl mb-5 font-bold">
-            Total absences par departement
-          </h2>
+          <div className="bg-white p-6 overflow-hidden shadow-sm sm:rounded-lg dark:bg-gray-800">
+            <h2 className="text-center text-xl mb-5 font-bold">
+              Total absences par type
+            </h2>
 
-          <Chart
-            type="pie"
-            data={{
-              labels: absenceTypeLabels,
-              datasets: [
-                {
-                  label: "Absences par type",
-                  data: absenceTypeCounts,
-                  backgroundColor: [
-                    "#FF6384",
-                    "#36A2EB",
-                    "#FFCE56",
-                    "#4BC0C0",
-                    "#9966FF",
-                    "#FF9F40",
-                  ],
-                },
-              ],
-            }}
-          />
+            <Chart
+              type="pie"
+              data={{
+                labels: absenceTypeLabels,
+                datasets: [
+                  {
+                    label: "Absences par type",
+                    data: absenceTypeCounts,
+                    backgroundColor: [
+                      "#FF6384",
+                      "#36A2EB",
+                      "#FFCE56",
+                      "#4BC0C0",
+                      "#9966FF",
+                      "#FF9F40",
+                    ],
+                  },
+                ],
+              }}
+            />
+          </div>
         </div>
       </div>
-      <div className="bg-white mt-5 overflow-auto shadow-sm sm:rounded-lg dark:bg-gray-800 w-['80%']">
+      <div className="bg-white mt-5 shadow-sm sm:rounded-lg dark:bg-gray-800 w-['80%']">
         <div className="w-full bg-white flex justify-between p-5 rounded-tr-lg rounded-tl-lg">
           <h2 className="font-bold text-lg">Employées</h2>
           <Link
@@ -307,18 +328,20 @@ export default function Dashboard({
             Afficher Tous
           </Link>
         </div>
+        <div className="overflow-x-auto">
+          <Table
+            dataSource={data}
+            columns={columns}
+            pagination={{ pageSize: 5 }}
+            onRow={(record) => ({
+              onClick: () => {
+                router.visit(route("admin.employes.show", record.key));
+              },
+            })}
+            rowClassName="cursor-pointer"
+          />
+        </div>
       </div>
-      <Table
-        dataSource={data}
-        columns={columns}
-        pagination={{ pageSize: 5 }}
-        onRow={(record) => ({
-          onClick: () => {
-            router.visit(route("admin.employes.show", record.key));
-          },
-        })}
-        rowClassName="cursor-pointer"
-      />
     </AuthenticatedLayout>
   );
 }

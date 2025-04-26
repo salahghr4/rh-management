@@ -96,7 +96,7 @@ const Show = ({ auth, employe }) => {
 
         <div className="bg-white rounded-3xl shadow-lg overflow-hidden">
           {/* Profile header */}
-          <div className="flex items-center relative bg-gradient-to-r from-indigo-600 to-blue-500 h-56">
+          <div className="flex items-center relative bg-gradient-to-r from-indigo-600 to-blue-500 h-48">
             <div className="ml-5 flex items-center">
               <div className="h-32 w-32 rounded-full bg-white border-4 border-white shadow-lg flex items-center justify-center overflow-hidden">
                 <User className="h-20 w-20 text-gray-400" />

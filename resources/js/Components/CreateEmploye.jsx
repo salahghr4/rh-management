@@ -99,14 +99,13 @@ export default function CreateForm({ departements }) {
     <div className="p-6 bg-white flex flex-col rounded-lg shadow-md">
       <div className="flex justify-between items-center mb-4">
         <div className="space-y-4">
-          <div>
-            <Link
-              href={route("admin.employes.index")}
-              className="flex items-center text-gray-600 hover:text-blue-600 text-sm font-medium"
-            >
-              <ArrowLeft className="h-4 w-4 mr-1" /> Retour
-            </Link>
-          </div>
+          <Link
+            href={route("admin.employes.index")}
+            className="w-fit flex items-center text-gray-600 hover:text-blue-600 text-sm font-medium"
+          >
+            <ArrowLeft className="h-4 w-4 mr-1" /> Retour
+          </Link>
+
           <div>
             <h1 className="text-2xl font-bold mb-1">Créer un employés</h1>
             <p className="text-gray-600">
@@ -554,7 +553,9 @@ export default function CreateForm({ departements }) {
                             value={formData.date_embauche}
                             onChange={handleChange}
                             className={`w-full px-4 py-2 border ${
-                              errors.date_embauche ? "border-red-500" : "border-gray-300"
+                              errors.date_embauche
+                                ? "border-red-500"
+                                : "border-gray-300"
                             } rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent`}
                           />
                           {errors.date_embauche && (

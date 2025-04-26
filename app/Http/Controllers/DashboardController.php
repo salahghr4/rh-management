@@ -49,6 +49,8 @@ class DashboardController extends Controller
             'departmentWithEmployees' => $departements,
             'absenceTypes' => $absenceTypes,
             'employees' => $employees,
+            'totalCDD' => User::where('type_contrat', 'CDD')->count(),
+            'totalCDI' => User::where('type_contrat', 'CDI')->count(),
         ]);
     }
 
@@ -57,7 +59,7 @@ class DashboardController extends Controller
     {
         $employees = User::with('departement')
             ->where('id', '!=', auth()->user()->id)
-            ->where('status', 'active')
+            ->where('status', 'actif')
             ->take(5)
             ->get()
             ->map(function ($employee) {
