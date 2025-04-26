@@ -1,6 +1,6 @@
 import { Link, router, usePage } from "@inertiajs/react";
 import { ArrowLeft } from "lucide-react";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function CreateForm({ departements }) {
   const [activeTab, setActiveTab] = useState("personal");
@@ -13,7 +13,7 @@ export default function CreateForm({ departements }) {
     date_embauche: new Date().toISOString().split("T")[0],
     poste: "",
     type_contrat: "CDI",
-    status: "active",
+    status: "actif",
     salaire: "1500",
     role: "employe",
     departement_id: "",
@@ -21,7 +21,6 @@ export default function CreateForm({ departements }) {
     password: "",
     password_confirmation: "",
   });
-  console.log(formData);
 
   const { errors } = usePage().props;
 
@@ -661,8 +660,8 @@ export default function CreateForm({ departements }) {
                                   : "border-gray-300"
                               } rounded-lg appearance-none focus:ring-2 focus:ring-pink-500 focus:border-transparent`}
                             >
-                              <option value="active">Active</option>
-                              <option value="inactive">Inactive</option>
+                              <option value="actif">Actif</option>
+                              <option value="inactif">Inactif</option>
                             </select>
                             {errors.status && (
                               <p className="text-red-500 text-sm mt-1">

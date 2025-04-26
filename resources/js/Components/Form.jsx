@@ -1,6 +1,6 @@
 import { Link, router, usePage } from "@inertiajs/react";
 import { ArrowLeft } from "lucide-react";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function EditForm({ employe, departements }) {
   const [activeTab, setActiveTab] = useState("personal");
@@ -13,7 +13,7 @@ export default function EditForm({ employe, departements }) {
     date_embauche: employe.date_embauche || "",
     poste: employe.poste || "",
     type_contrat: employe.type_contrat || "CDI",
-    status: employe.status || "active",
+    status: employe.status || "actif",
     salaire: employe.salaire || "",
     role: employe.role || "employe",
     departement_id: employe.departement_id || "",
@@ -653,8 +653,8 @@ export default function EditForm({ employe, departements }) {
                                   : "border-gray-300"
                               } rounded-lg appearance-none focus:ring-2 focus:ring-pink-500 focus:border-transparent`}
                             >
-                              <option value="active">Active</option>
-                              <option value="inactive">Inactive</option>
+                              <option value="actif">Actif</option>
+                              <option value="inactif">Inactif</option>
                             </select>
                             {errors.status && (
                               <p className="text-red-500 text-sm mt-1">

@@ -14,6 +14,7 @@ Route::get('/', function () {
 Route::prefix('admin')->middleware(['auth', 'checkRole:admin,rh'])->name('admin.')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'admin'])->name('dashboard');
     Route::resource('employes', EmployeController::class)->names('employes');
+    Route::put('/employes/{employe}/activer', [EmployeController::class, 'activer'])->name('employes.activer');
 });
 
 Route::prefix('employe')->middleware(['auth', 'checkRole:employe,manager'])->name('employe.')->group(function () {

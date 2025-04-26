@@ -16,19 +16,11 @@ class LoginRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        // Check if the user is active
-        if ($this->user()) {
-            if ($this->user()->status === 'inactive') {
-                throw ValidationException::withMessages([
-                    'loginError' => ["Votre compte est inactif. veuillez contacter l'administrateur."],
-                ]);
-            }
-        }
-        // If the user is not authenticated, check if the email is provided
+        // If the user is inactif and tries to login, we throw a validation exception
         if ($this->filled('email')) {
             // Check if the user exists and is active
             $user = Auth::getProvider()->retrieveByCredentials(['email' => $this->input('email')]);
-            if ($user && $user->status === 'inactive') {
+            if ($user && $user->status === 'inactif') {
                 throw ValidationException::withMessages([
                     'loginError' => ["Votre compte est inactif. veuillez contacter l'administrateur."],
                 ]);

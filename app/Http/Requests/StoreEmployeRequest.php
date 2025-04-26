@@ -31,7 +31,7 @@ class StoreEmployeRequest extends FormRequest
             'date_embauche' => ['required', 'date', 'before_or_equal:today'],
             'poste' => ['required', 'string', 'max:255'],
             'type_contrat' => ['required', Rule::in(['CDI', 'CDD'])],
-            'status' => ['required', Rule::in(['active', 'inactive'])],
+            'status' => ['required', Rule::in(['actif', 'inactif'])],
             'salaire' => ['required', 'numeric', 'min:1500'],
             'role' => ['required', Rule::in(['admin', 'employe', 'rh', 'manager'])],
             'departement_id' => ['nullable', 'exists:departements,id'],
