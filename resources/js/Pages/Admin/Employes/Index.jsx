@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 
 const Index = ({ auth, employes }) => {
-  console.log(employes);
+  // console.log(employes);
   const departementFilters = [
     ...new Set(employes.map((emp) => emp.departement?.nom)),
   ]
@@ -209,6 +209,7 @@ const Index = ({ auth, employes }) => {
     telephone: employee.telephone,
     type_contrat: employee.type_contrat,
   }));
+  
   return (
     <AuthenticatedLayout user={auth.user}>
       <Head title="Employés" />

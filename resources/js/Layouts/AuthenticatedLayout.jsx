@@ -18,7 +18,7 @@ export default function Authenticated({ user, header, children }) {
     const [toggled, setToggled] = useState(false); // for mobile
     const [isMobile, setIsMobile] = useState(
         window.innerWidth < 768 ? true : false
-    ); // Check if the screen is mobile size
+    ); 
 
     const routePrefix =
         user?.role === "admin" || user?.role === "rh" ? "admin" : "employe";
@@ -125,6 +125,12 @@ export default function Authenticated({ user, header, children }) {
                         <MenuItem
                             className="my-3"
                             icon={<CalendarCheck size={24} />}
+                            active={currentRoute.includes("conges")}
+                            onClick={() => {
+                                router.visit(
+                                    route(`${routePrefix}.conges.index`)
+                                );
+                            }}
                         >
                             Congés
                         </MenuItem>
