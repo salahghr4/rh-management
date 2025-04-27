@@ -12,7 +12,7 @@ class CongesController extends Controller
     public function index()
     {
         return inertia('Employe/Conges/Index', [
-            'conges' => DemandeConge::with('employe:id,id,nom,prenom')->where('employe_id', auth()->user()->id)->get()
+            'conges' => DemandeConge::with('employe:id,id,nom,prenom,joures_conges_restant')->where('employe_id', auth()->user()->id)->latest()->get()
         ]);
     }
     public function create()
@@ -24,15 +24,15 @@ class CongesController extends Controller
     public function store(Request $request)
     {
        $validated = $request->validate([
-            'date_debut' => 'required|date',
-            'date_fin' => 'required|date',
+            'date_debut' => 'required|date|after_or_equal:date',
+            'date_fin' => 'required|date|after:date_debut',
             'type' => ['required', Rule::in(['autre', 'maladie', 'congé'])],
-            'commentaire' => 'required|string',
+            'commentaire' => 'nullable|string',
         ]);
         $validated['employe_id'] = auth()->user()->id;
-        
+
         DemandeConge::create($validated);
-        
+
         return redirect()->route('employe.conges.index')->with('success', 'Demande de congé envoyée avec succès');
     }
 

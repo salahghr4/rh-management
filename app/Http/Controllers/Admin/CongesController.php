@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Models\DemandeConge;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Validation\Rule;
 
 class CongesController extends Controller
 {
@@ -15,7 +16,7 @@ class CongesController extends Controller
     {
         return inertia('Admin/Conges/Index', [
             // 'conges' => DemandeConge::with('users')->get()
-            'conges' => DemandeConge::with('employe:id,id,nom,prenom')->latest()->get()
+            'conges' => DemandeConge::with('employe:id,id,nom,prenom,joures_conges_restant')->latest()->get()
         ]);
     }
 
@@ -54,13 +55,12 @@ class CongesController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, DemandeConge $conge)
     {
         $request->validate([
-            'statut' => 'required|string',
+            'statut' => ['required', 'string', Rule::in(['accepté', 'refusé', 'en attente'])],
             'commentaire_rh' => 'nullable|string',
         ]);
-        $conge = DemandeConge::findOrFail($id);
         $conge->statut = $request->statut;
         $conge->commentaire_rh = $request->commentaire_rh;
         $conge->save();

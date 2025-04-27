@@ -22,3 +22,8 @@ button.ant-btn-variant-solid {
   background-color: #3b82f6;
   color: #fff;
 }
+
+div.ant-picker-input input {
+  font-size: 16px !important;
+  font-weight: 400 !important;
+}

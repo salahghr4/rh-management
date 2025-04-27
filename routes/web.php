@@ -18,7 +18,7 @@ Route::prefix('admin')->middleware(['auth', 'checkRole:admin,rh'])->name('admin.
     Route::get('/dashboard', [DashboardController::class, 'admin'])->name('dashboard');
     Route::resource('employes', AdminEmployeController::class)->names('employes');
     Route::put('/employes/{employe}/activer', [AdminEmployeController::class, 'activer'])->name('employes.activer');
-    Route::resource('conges', AdminCongesController::class)->names('conges');
+    Route::resource('conges', AdminCongesController::class)->only(['index', 'update'])->names('conges');
 });
 
 Route::prefix('employe')->middleware(['auth', 'checkRole:employe,manager'])->name('employe.')->group(function () {
