@@ -2,6 +2,7 @@ import ApplicationLogo from "@/Components/ApplicationLogo";
 import Dropdown from "@/Components/Dropdown";
 import {
     Banknote,
+    Building,
     CalendarCheck,
     ChevronFirst,
     ChevronLast,
@@ -141,6 +142,19 @@ export default function Authenticated({ user, header, children }) {
                         >
                             Paies
                         </MenuItem>
+                        {user?.role === "admin" && (
+                            <MenuItem
+                                className="my-3"
+                                icon={<Building size={20} />}
+                                active={currentRoute.includes("departements")}
+                                onClick={() => {
+                                    router.visit(route(`${routePrefix}.departements.index`));
+                                }}
+                            >
+                                Départements
+                            </MenuItem>
+                        )}
+
                     </Menu>
                 </Sidebar>
 

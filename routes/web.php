@@ -7,6 +7,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Employe\CongesController;
 use App\Http\Controllers\Employe\EmployeController;
+use App\Http\Controllers\Admin\DepartementController;
 use App\Http\Controllers\Admin\CongesController as AdminCongesController ;
 use App\Http\Controllers\Admin\EmployeController as AdminEmployeController;
 
@@ -19,6 +20,7 @@ Route::prefix('admin')->middleware(['auth', 'checkRole:admin,rh'])->name('admin.
     Route::resource('employes', AdminEmployeController::class)->names('employes');
     Route::put('/employes/{employe}/activer', [AdminEmployeController::class, 'activer'])->name('employes.activer');
     Route::resource('conges', AdminCongesController::class)->only(['index', 'update'])->names('conges');
+    Route::resource('departements', DepartementController::class)->names('departements');
 });
 
 Route::prefix('employe')->middleware(['auth', 'checkRole:employe,manager'])->name('employe.')->group(function () {
