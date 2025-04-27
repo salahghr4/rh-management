@@ -19,7 +19,7 @@ export default function Authenticated({ user, header, children }) {
     const [toggled, setToggled] = useState(false); // for mobile
     const [isMobile, setIsMobile] = useState(
         window.innerWidth < 768 ? true : false
-    ); 
+    );
 
     const routePrefix =
         user?.role === "admin" || user?.role === "rh" ? "admin" : "employe";
@@ -142,7 +142,7 @@ export default function Authenticated({ user, header, children }) {
                         >
                             Paies
                         </MenuItem>
-                        {user?.role === "admin" && (
+                        {routePrefix === "admin" && (
                             <MenuItem
                                 className="my-3"
                                 icon={<Building size={20} />}
