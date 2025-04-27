@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\User;
+use App\Models\Departement;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreEmployeRequest;
 use App\Http\Requests\UpdateEmployeRequest;
-use App\Models\Departement;
 
 class EmployeController extends Controller
 {
