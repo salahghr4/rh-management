@@ -1,8 +1,8 @@
-import { Head, router } from '@inertiajs/react';
-import React, { useState } from 'react';
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Table, Button, Space, Modal, Input, message } from 'antd';
-import { Edit, Trash } from 'lucide-react';
+import { Head, router } from "@inertiajs/react";
+import React, { useState } from "react";
+import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
+import { Table, Button, Space, Modal, Input, message } from "antd";
+import { Edit, Trash } from "lucide-react";
 
 export default function Index({ auth, departements }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -35,7 +35,9 @@ export default function Index({ auth, departements }) {
       return;
     }
     if (isEditMode) {
-      router.put(route("admin.departements.update", selectedDepartement.key), {nom: departementName});
+      router.put(route("admin.departements.update", selectedDepartement.key), {
+        nom: departementName,
+      });
       message.success("Département modifié avec succès!");
     } else {
       router.post(route("admin.departements.store"), { nom: departementName });
@@ -125,7 +127,8 @@ export default function Index({ auth, departements }) {
           cancelText="Annuler"
         >
           <Input
-            className="mt-2"
+            className="mt-2 rounded-lg outline-none border-2 border-gray-300 focus:border-blue-500"
+            type="text"
             placeholder="Entrez un nom de département..."
             value={departementName}
             onChange={(e) => setDepartementName(e.target.value)}
@@ -141,6 +144,7 @@ export default function Index({ auth, departements }) {
           onCancel={() => setIsDeleteModalOpen(false)}
           okText="Supprimer"
           cancelText="Annuler"
+          okButtonProps={{ danger: true }}
         >
           <p>Êtes-vous sûr de vouloir supprimer ce département ?</p>
         </Modal>
