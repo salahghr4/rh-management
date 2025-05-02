@@ -72,8 +72,8 @@ class User extends Authenticatable
         return $this->role === 'rh';
     }
 
-    public function paie()
+    public function paies()
     {
-        return $this->hasMany(Paie::class);
+        return $this->hasMany(Paie::class, 'employe_id');
     }
 }

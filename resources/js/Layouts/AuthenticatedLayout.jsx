@@ -139,6 +139,12 @@ export default function Authenticated({ user, header, children }) {
                         <MenuItem
                             className="my-3"
                             icon={<Banknote size={20} />}
+                            active={currentRoute.includes("paie")}
+                            onClick={() => {
+                                router.visit(
+                                    route(`${routePrefix}.paies.index`)
+                                );
+                            }}
                         >
                             Paies
                         </MenuItem>
@@ -192,15 +198,15 @@ export default function Authenticated({ user, header, children }) {
                             <div className="ms-3 relative">
                                 <Dropdown>
                                     <Dropdown.Trigger>
-                                        <span className="inline-flex rounded-md ">
-                                            <div className="w-9 h-9 cursor-pointer rounded-full bg-blue-500 text-white flex items-center justify-center">
+                                        <span className="inline-flex rounded-md">
+                                            <button className="w-9 h-9 cursor-pointer rounded-full bg-blue-500 text-white flex items-center justify-center focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200">
                                                 {user?.nom
                                                     ?.charAt(0)
                                                     .toLocaleUpperCase() +
                                                     user?.prenom
                                                         ?.charAt(0)
                                                         .toLocaleUpperCase()}
-                                            </div>
+                                            </button>
                                         </span>
                                     </Dropdown.Trigger>
 
