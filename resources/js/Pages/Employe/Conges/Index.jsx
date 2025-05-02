@@ -5,7 +5,6 @@ import { Head, router } from "@inertiajs/react";
 import { ExclamationCircleFilled } from "@ant-design/icons";
 
 export default function Index({ auth, conges }) {
-  console.log(conges);
 
   const handleDelete = (id) => {
     Modal.confirm({

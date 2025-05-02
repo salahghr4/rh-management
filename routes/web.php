@@ -10,6 +10,7 @@ use App\Http\Controllers\Employe\EmployeController;
 use App\Http\Controllers\Admin\DepartementController;
 use App\Http\Controllers\Admin\CongesController as AdminCongesController ;
 use App\Http\Controllers\Admin\EmployeController as AdminEmployeController;
+use App\Http\Controllers\Employe\PaieController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome');
@@ -27,6 +28,7 @@ Route::prefix('employe')->middleware(['auth', 'checkRole:employe,manager'])->nam
     Route::get('/dashboard', [DashboardController::class, 'employe'])->name('dashboard');
     Route::resource('employes', EmployeController::class)->only('index')->names('employes');
     Route::resource('conges', CongesController::class)->names('conges');
+    Route::get('/paies', [PaieController::class, 'index'])->name('paies.index');
 });
 
 Route::middleware('auth')->group(function () {
