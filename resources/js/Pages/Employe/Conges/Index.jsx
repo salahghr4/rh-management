@@ -5,6 +5,7 @@ import { Head, router } from "@inertiajs/react";
 import { ExclamationCircleFilled } from "@ant-design/icons";
 
 export default function Index({ auth, conges }) {
+  console.log(conges);
 
   const handleDelete = (id) => {
     Modal.confirm({
@@ -139,13 +140,18 @@ export default function Index({ auth, conges }) {
     {
       title: "Actions",
       key: "actions",
-      render: (_, record) => (
-        <Space>
-          <Button size="small" danger onClick={() => handleDelete(record.key)}>
-            Annuler la demande
-          </Button>
-        </Space>
-      ),
+      render: (_, record) =>
+        record.statut === "en attente" && (
+          <Space>
+            <Button
+              size="small"
+              danger
+              onClick={() => handleDelete(record.key)}
+            >
+              Annuler la demande
+            </Button>
+          </Space>
+        ),
     },
   ];
 

@@ -3,16 +3,37 @@ import { Head, router, usePage } from "@inertiajs/react";
 import { DatePicker } from "antd";
 import { useState } from "react";
 
-export default function Create({ auth, types }) {
+export default function Create({ auth, types, joursRestants }) {
   const [formData, setFormData] = useState({
     date_debut: "",
     date_fin: "",
     type: "congé",
     commentaire: "",
   });
-  console.log(formData);
 
   const { RangePicker } = DatePicker;
+
+  const getYearMonth = (date) => date.year() * 12 + date.month();
+
+  const LimitConges = (current, { from, type }) => {
+    if (!from) return false;
+
+    const maxDate = from.clone().add(joursRestants - 1, "days");
+
+    switch (type) {
+      case "year":
+        return (
+          current.year() !== from.year() && current.year() !== maxDate.year()
+        );
+      case "month":
+        return (
+          getYearMonth(current) < getYearMonth(from) ||
+          getYearMonth(current) > getYearMonth(maxDate)
+        );
+      default:
+        return current.isBefore(from, "day") || current.isAfter(maxDate, "day");
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -66,6 +87,7 @@ export default function Create({ auth, types }) {
                     </label>
 
                     <RangePicker
+                      disabledDate={LimitConges}
                       onChange={(date) => {
                         if (date) {
                           setFormData((prevState) => ({

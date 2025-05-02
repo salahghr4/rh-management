@@ -19,12 +19,13 @@ class CongesController extends Controller
     {
         return inertia('Employe/Conges/Create',[
             "types" => DemandeConge::distinct()->pluck('type'),
+            "joursRestants" => auth()->user()->joures_conges_restant,
         ]);
     }
     public function store(Request $request)
     {
        $validated = $request->validate([
-            'date_debut' => 'required|date|after_or_equal:date',
+            'date_debut' => 'required|date|after_or_equal:today',
             'date_fin' => 'required|date|after:date_debut',
             'type' => ['required', Rule::in(['autre', 'maladie', 'congé'])],
             'commentaire' => 'nullable|string',
