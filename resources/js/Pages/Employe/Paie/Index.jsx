@@ -53,8 +53,8 @@ const Index = ({ auth, paies, date_embauche }) => {
     };
   };
 
-  const totalSalaire = paies.reduce((acc, item) => acc + +item.montant, 0);
-  const totalPrime = paies.reduce((acc, item) => acc + (+item.primes || 0), 0);
+  const totalSalaire = paies.reduce((acc, item) => acc + +item.montant, 0).toFixed(2);
+  const totalPrime = paies.reduce((acc, item) => acc + (+item.prime || 0), 0).toFixed(2);
 
   // display list of the years from the date_embauche to the current year
   const currentYear = new Date().getFullYear();
@@ -119,7 +119,7 @@ const Index = ({ auth, paies, date_embauche }) => {
       render: (prime) => {
         return (
           <Tag color={prime ? "blue" : "red"} className="text-sm py-1">
-            {prime ? prime : "Aucune prime"}
+            {prime}
           </Tag>
         );
       },
@@ -132,8 +132,8 @@ const Index = ({ auth, paies, date_embauche }) => {
       month: "long",
     }),
     annee: new Date(paie.date).getFullYear(),
-    montant: paie.montant,
-    prime: paie.primes,
+    montant: Number(paie.montant).toFixed(2),
+    prime: paie.prime ? Number(paie.prime).toFixed(2) : "Aucune prime",
   }));
 
   return (
