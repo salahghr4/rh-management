@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->decimal('montant', 10, 2);
             $table->date('date');
-            $table->decimal('primes', 10, 2)->nullable();
+            $table->decimal('prime', 10, 2)->nullable();
             $table->foreignId('employe_id')->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });

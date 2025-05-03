@@ -163,7 +163,7 @@ export default function Dashboard({
                 {
                   label: "Prime (DH)",
                   data: paisParMois.map((item) =>
-                    item.primes ? parseFloat(item.primes) : 0
+                    item.prime ? parseFloat(item.prime) : 0
                   ),
                   backgroundColor: "#ff1a02",
                   // barThickness: 40,
