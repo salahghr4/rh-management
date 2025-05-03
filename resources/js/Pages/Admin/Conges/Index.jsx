@@ -1,5 +1,5 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head, router } from "@inertiajs/react";
+import { Head, Link, router } from "@inertiajs/react";
 import { Button, Input, Modal, Space, Table, Tag } from "antd";
 import { useState } from "react";
 
@@ -42,16 +42,28 @@ export default function Index({ auth, conges }) {
 
   const columns = [
     {
-      title: "Nom",
-      dataIndex: "nom",
-      key: "nom",
+      title: "Employé",
+      dataIndex: "employe",
+      key: "employe",
       sorter: (a, b) => a.nom.localeCompare(b.nom),
-    },
-    {
-      title: "Prénom",
-      dataIndex: "prenom",
-      key: "prenom",
-      sorter: (a, b) => a.prenom.localeCompare(b.prenom),
+      filters: conges
+        .map((conge) => ({
+          text: `${conge.employe.nom} ${conge.employe.prenom}`,
+          value: conge.employe.id,
+        }))
+        .filter(
+          (value, index, self) =>
+            self.findIndex((v) => v.value === value.value) === index
+        ),
+      onFilter: (value, record) => record.employe_id === value,
+      render: (employe, record) => (
+        <Link
+          href={route("admin.employes.show", record.employe_id)}
+          className="underline text-blue-500"
+        >
+          {employe}
+        </Link>
+      ),
     },
     {
       title: "Type",
@@ -170,8 +182,7 @@ export default function Index({ auth, conges }) {
 
   const data = conges.map((conge) => ({
     key: conge.id,
-    nom: conge.employe.nom,
-    prenom: conge.employe.prenom,
+    employe: `${conge.employe.nom} ${conge.employe.prenom}`,
     employe_id: conge.employe.id,
     type: conge.type,
     date_debut: conge.date_debut,

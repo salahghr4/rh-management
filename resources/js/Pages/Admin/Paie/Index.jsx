@@ -1,13 +1,12 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Head } from "@inertiajs/react";
+import { Head, Link } from "@inertiajs/react";
 import { Button, Table, Tag } from "antd";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import logo from "../../../../Assest/img/rhLogo.png";
 
-const Index = ({ auth, paies, date_embauche }) => {
+const Index = ({ auth, paies }) => {
   console.log(paies);
-  console.log(date_embauche);
 
   const exportPDF = (data) => {
     const doc = new jsPDF();
@@ -19,14 +18,24 @@ const Index = ({ auth, paies, date_embauche }) => {
 
       // Title and employee info
       doc.setFontSize(12);
-      doc.text("Historique des Paiements", 150, 30);
-      doc.text("Employé : " + auth.user.nom + " " + auth.user.prenom, 150, 37);
+      doc.text("Fiche Historique de Paiement", 150, 37);
       doc.text(`Date : ${new Date().toLocaleDateString("fr-FR")}`, 150, 44);
 
       // Table
       autoTable(doc, {
-        head: [["Mois", "Année", "Salaire (DH)", "Prime (DH)"]],
+        head: [
+          [
+            "Employé",
+            "Date de paiement",
+            "Mois",
+            "Année",
+            "Salaire (DH)",
+            "Prime (DH)",
+          ],
+        ],
         body: data.map((paie) => [
+          paie.employe,
+          paie.date_de_paiment,
           paie.mois,
           paie.annee,
           paie.montant,
@@ -41,27 +50,61 @@ const Index = ({ auth, paies, date_embauche }) => {
         },
       });
 
+      const pageCount = doc.internal.getNumberOfPages();
+      for (let i = 1; i <= pageCount; i++) {
+        doc.setPage(i);
+        doc.text(
+          `Page ${i} / ${pageCount}`,
+          doc.internal.pageSize.getWidth() - 30,
+          doc.internal.pageSize.getHeight() - 10
+        );
+      }
       // Footer
       doc.setFontSize(10);
       doc.text(
-        "Ce document est généré à titre informatif. Veuillez contacter le département RH pour toute question relative à ce rapport.",
+        "Ce document est confidentiel. Pour toute information complémentaire, veuillez contacter les Ressources Humaines.",
         14,
-        doc.internal.pageSize.getHeight() - 10
+        doc.internal.pageSize.getHeight() - 3
       );
 
       doc.save("historique_paie.pdf");
     };
   };
 
-  // display list of the years from the date_embauche to the current year
-  const currentYear = new Date().getFullYear();
-  const startYear = new Date(date_embauche).getFullYear();
-  const years = [];
-  for (let year = startYear; year <= currentYear; year++) {
-    years.push({ text: year, value: year });
-  }
-
   const columns = [
+    {
+      title: "Employé",
+      dataIndex: "employe",
+      key: "employe",
+      sorter: (a, b) => a.nom.localeCompare(b.nom),
+      filters: paies
+        .map((paie) => ({
+          text: `${paie.employe.nom} ${paie.employe.prenom}`,
+          value: paie.employe.id,
+        }))
+        .filter(
+          (value, index, self) =>
+            self.findIndex((v) => v.value === value.value) === index
+        ),
+      onFilter: (value, record) => record.employe_id === value,
+      render: (employe, record) => (
+        <Link
+          href={route("admin.employes.show", record.employe_id)}
+          className="underline text-blue-500"
+        >
+          {employe}
+        </Link>
+      ),
+    },
+    {
+      title: "Date de paiement",
+      dataIndex: "date_de_paiment",
+      key: "date_de_paiment",
+      sorter: (a, b) => new Date(a.date) - new Date(b.date),
+      render: (date_de_paiment) => {
+        return <Tag>{date_de_paiment}</Tag>;
+      },
+    },
     {
       title: "Mois",
       dataIndex: "mois",
@@ -89,7 +132,10 @@ const Index = ({ auth, paies, date_embauche }) => {
       title: "Année",
       dataIndex: "annee",
       key: "annee",
-      filters: years,
+      filters: paies
+        .map((paie) => new Date(paie.date).getFullYear())
+        .filter((value, index, self) => self.indexOf(value) === index)
+        .map((annee) => ({ text: annee, value: annee })),
       onFilter: (value, record) => record.annee.startsWith(value),
       render: (annee) => {
         return <Tag>{annee}</Tag>;
@@ -122,9 +168,16 @@ const Index = ({ auth, paies, date_embauche }) => {
       },
     },
   ];
+
   const data = paies.map((paie) => ({
     key: paie.id,
-    date: paie.date,
+    employe_id: paie.employe.id,
+    employe: `${paie.employe.nom} ${paie.employe.prenom}`,
+    date_de_paiment: new Date(paie.date).toLocaleDateString("fr-FR", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    }),
     mois: new Date(paie.date).toLocaleDateString("fr-FR", {
       month: "long",
     }),
@@ -158,4 +211,5 @@ const Index = ({ auth, paies, date_embauche }) => {
     </AuthenticatedLayout>
   );
 };
+
 export default Index;

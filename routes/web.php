@@ -10,6 +10,7 @@ use App\Http\Controllers\Employe\EmployeController;
 use App\Http\Controllers\Admin\DepartementController;
 use App\Http\Controllers\Admin\CongesController as AdminCongesController ;
 use App\Http\Controllers\Admin\EmployeController as AdminEmployeController;
+use App\Http\Controllers\Admin\PaieController as AdminPaieController;
 use App\Http\Controllers\Employe\PaieController;
 
 Route::get('/', function () {
@@ -22,6 +23,7 @@ Route::prefix('admin')->middleware(['auth', 'checkRole:admin,rh'])->name('admin.
     Route::put('/employes/{employe}/activer', [AdminEmployeController::class, 'activer'])->name('employes.activer');
     Route::resource('conges', AdminCongesController::class)->only(['index', 'update'])->names('conges');
     Route::resource('departements', DepartementController::class)->names('departements');
+    Route::get('/paies', [AdminPaieController::class, 'index'])->name('paies.index');
 });
 
 Route::prefix('employe')->middleware(['auth', 'checkRole:employe,manager'])->name('employe.')->group(function () {
