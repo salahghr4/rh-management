@@ -24,6 +24,8 @@ Route::prefix('admin')->middleware(['auth', 'checkRole:admin,rh'])->name('admin.
     Route::resource('conges', AdminCongesController::class)->only(['index', 'update'])->names('conges');
     Route::resource('departements', DepartementController::class)->names('departements');
     Route::get('/paies', [AdminPaieController::class, 'index'])->name('paies.index');
+    Route::get('/paies/create', [AdminPaieController::class, 'create'])->name('paies.create');
+    Route::post('/paies', [AdminPaieController::class, 'store'])->name('paies.store');
 });
 
 Route::prefix('employe')->middleware(['auth', 'checkRole:employe,manager'])->name('employe.')->group(function () {

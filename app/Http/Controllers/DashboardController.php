@@ -8,7 +8,7 @@ use Inertia\Inertia;
 use App\Models\Absence;
 use App\Models\Departement;
 use App\Models\DemandeConge;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
@@ -27,7 +27,7 @@ class DashboardController extends Controller
         $departements = Departement::withCount('users')->get();
 
         // get for each absence type the total number of absences
-        $absenceTypes = Absence::select('type', \DB::raw('count(*) as total'))
+        $absenceTypes = Absence::select('type', DB::raw('count(*) as total'))
             ->groupBy('type')
             ->get()
             ->map(function ($absence) {
