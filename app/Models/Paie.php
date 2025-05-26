@@ -7,17 +7,18 @@ use Illuminate\Database\Eloquent\Model;
 
 class Paie extends Model
 {
-    use HasFactory;
+  use HasFactory;
 
-    protected $fillable = [
-        'montant',
-        "date",
-        "primes",
-        'employe_id',
-    ];
 
-    public function employe()
-    {
-        return $this->belongsTo(User::class, 'employe_id');
-    }
+  protected $fillable = [
+    'montant',
+    "date",
+    "prime",
+    'employe_id',
+  ];
+
+  public function employe()
+  {
+    return $this->belongsTo(User::class, 'employe_id');
+  }
 }
