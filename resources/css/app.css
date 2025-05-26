@@ -27,3 +27,6 @@ div.ant-picker-input input {
   font-size: 16px !important;
   font-weight: 400 !important;
 }
+input[type="search"] {
+  box-shadow: none !important;
+}
