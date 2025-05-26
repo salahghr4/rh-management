@@ -179,7 +179,7 @@ export default function Index({ auth, conges }) {
                 className="bg-blue-500 hover:bg-blue-600 p-4"
                 onClick={() => router.visit(route("employe.conges.create"))}
               >
-                Ajouter Congé
+                Demander Congé
               </Button>
             </div>
           </div>

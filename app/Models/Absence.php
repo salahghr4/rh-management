@@ -12,19 +12,13 @@ class Absence extends Model
     protected $fillable = [
         'employe_id',
         'date_absence',
-        "type",
-        "commentaire_justificatif",
-        "statut",
         "justificatif",
-        "fichier_justificatif_name",
-        "fichier_justificatif_path",
-        "fichier_justificatif_mime",
-        "fichier_justificatif_size",
+        'type',
     ];
 
     public function employe()
     {
-        return $this->belongsTo(User::class, 'employe_id');
+      return $this->belongsTo(User::class, 'employe_id');
     }
 
 }
