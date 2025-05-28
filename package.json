@@ -26,12 +26,8 @@
         "@fullcalendar/interaction": "^6.1.17",
         "@fullcalendar/react": "^6.1.17",
         "@tippyjs/react": "^4.2.6",
-<<<<<<< HEAD
-        "antd": "^5.25.3",
-=======
         "antd": "^5.24.7",
         "dayjs": "^1.11.13",
->>>>>>> 747b4368a39324c453ee07b16b0eef08f64f1c4f
         "jspdf": "^3.0.1",
         "jspdf-autotable": "^5.0.2",
         "lucide-react": "^0.488.0",
