@@ -15,7 +15,6 @@ const Create = ({ auth, employes }) => {
     }))
   );
 
-  console.log("Paies initiales :", paies);
   const handlePrimeChange = (value, employe_id) => {
     setPaies((prevPaies) => {
       return prevPaies.map((p) =>
@@ -24,7 +23,14 @@ const Create = ({ auth, employes }) => {
     });
   };
   const handlePaymentLaunch = () => {
-    router.post(route("admin.paies.store"), { paies: paies });
+    router.post(route("admin.paies.store"), { paies: paies }, {
+      onSuccess: () => {
+        message.success("Paiements lancés avec succès !");
+      },
+      onError: () => {
+        message.error("Erreur lors du lancement des paiements.");
+      },
+    });
   };
 
   const columns = [

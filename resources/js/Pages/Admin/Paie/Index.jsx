@@ -5,8 +5,8 @@ import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import logo from "../../../../Assest/img/rhLogo.png";
 
-const Index = ({ auth, paies }) => {
-  console.log(paies);
+const Index = ({ auth, paies, canCreatePaie }) => {
+  console.log(canCreatePaie);
 
   const exportPDF = (data) => {
     const doc = new jsPDF();
@@ -201,14 +201,16 @@ const Index = ({ auth, paies }) => {
             >
               Exporter en PDF
             </Button>
-            <Button
-              type="primary"
-              className="bg-blue-500 hover:bg-blue-600 p-4"
-            >
-              <Link href={route("admin.paies.create")}>
-                Ajouter les paiements
-              </Link>
-            </Button>
+            {canCreatePaie && (
+              <Button
+                type="primary"
+                className="bg-blue-500 hover:bg-blue-600 p-4"
+              >
+                <Link href={route("admin.paies.create")}>
+                  Ajouter les paiements
+                </Link>
+              </Button>
+            )}
           </div>
         </div>
         <div className="overflow-x-auto">

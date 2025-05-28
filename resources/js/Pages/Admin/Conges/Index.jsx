@@ -1,6 +1,6 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link, router } from "@inertiajs/react";
-import { Button, Input, Modal, Space, Table, Tag } from "antd";
+import { Button, Input, message, Modal, Space, Table, Tag } from "antd";
 import { useState } from "react";
 
 export default function Index({ auth, conges }) {
@@ -28,6 +28,7 @@ export default function Index({ auth, conges }) {
           setComment("");
           setSelectedConge(null);
           setActionType("");
+          message.success(`Demande de congé ${actionType} avec succès !`);
         },
       }
     );

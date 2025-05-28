@@ -1,6 +1,6 @@
 import React from "react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Button, Modal, Space, Table, Tag } from "antd";
+import { Button, message, Modal, Space, Table, Tag } from "antd";
 import { Head, router } from "@inertiajs/react";
 import { ExclamationCircleFilled } from "@ant-design/icons";
 
@@ -19,6 +19,9 @@ export default function Index({ auth, conges }) {
       onOk() {
         router.delete(route("employe.conges.destroy", id), {
           preserveScroll: true,
+          onSuccess: () => {
+            message.success("Demande de congé annulée avec succès !");
+          },
         });
       },
     });

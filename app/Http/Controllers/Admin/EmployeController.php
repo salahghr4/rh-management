@@ -98,7 +98,6 @@ class EmployeController extends Controller
      */
     public function update(UpdateEmployeRequest $request, User $employe)
     {
-        dd($request);
         $validated = $request->validated();
 
         // Only hash the password if provided

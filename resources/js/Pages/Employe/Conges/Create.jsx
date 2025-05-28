@@ -1,6 +1,6 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, router, usePage } from "@inertiajs/react";
-import { DatePicker } from "antd";
+import { DatePicker, message } from "antd";
 import { useState } from "react";
 
 export default function Create({ auth, types, joursRestants }) {
@@ -53,9 +53,7 @@ export default function Create({ auth, types, joursRestants }) {
           type: "autre",
           commentaire: "",
         });
-      },
-      onError: (errors) => {
-        console.error("Error creating employee record:", errors);
+        message.success("Demande de congé créée avec succès !");
       },
     });
   };

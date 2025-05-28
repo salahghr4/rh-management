@@ -13,8 +13,10 @@ class PaieController extends Controller
   public function index()
   {
     $paies = Paie::with('employe:id,nom,prenom')->latest()->get();
+
     return inertia('Admin/Paie/Index', [
       'paies' => $paies,
+      'canCreatePaie' => !Paie::whereMonth('date', now()->month)->whereYear('date', now()->year)->exists(),
     ]);
   }
 
