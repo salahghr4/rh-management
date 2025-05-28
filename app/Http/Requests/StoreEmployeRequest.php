@@ -27,7 +27,7 @@ class StoreEmployeRequest extends FormRequest
             'prenom' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255', 'unique:users,email'],
             'adresse' => ['required', 'string', 'max:255'],
-            'telephone' => ['required', 'regex:/^0[5-7][0-9]{8}$/'],
+            'telephone' => ['required', 'string', 'max:20'],
             'date_embauche' => ['required', 'date', 'before_or_equal:today'],
             'poste' => ['required', 'string', 'max:255'],
             'type_contrat' => ['required', Rule::in(['CDI', 'CDD'])],

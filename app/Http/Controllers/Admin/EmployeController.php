@@ -18,7 +18,7 @@ class EmployeController extends Controller
     {
         //
         return inertia('Admin/Employes/Index', [
-            'employes' => User::with('departement')->get()
+            'employes' => User::with('departement')->latest()->get()
         ]);
     }
 
@@ -94,9 +94,9 @@ class EmployeController extends Controller
             unset($validated['password']);
         }
 
-        
+
         $employe->update($validated);
-        
+
         if ($request->hasFile('documents')) {
             $employe->documents()->delete();
             // foreach ($request->file('documents') as $file) {
