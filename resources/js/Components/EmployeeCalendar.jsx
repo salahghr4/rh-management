@@ -6,13 +6,17 @@ import "tippy.js/dist/tippy.css";
 
 export default function EmployeeCalendar({ absences = [] }) {
     // Define color mapping for different absence types
-    const getAbsenceColors = (type, justified) => {
+    const getAbsenceColors = (type, justificatif) => {
         // Default colors if type is not specified
         let bgColor = "#ef4444"; // red-500
         let borderColor = "#dc2626"; // red-600
 
         // Check if the absence is justified
-        const isJustified = justified && justified.toLowerCase() === "oui";
+        const noJustifier = justificatif && justificatif.toLowerCase() === "non";
+
+        if (noJustifier) {
+            return { bgColor, borderColor };
+        }
 
         // Set colors based on type
         switch (type?.toLowerCase()) {
@@ -23,6 +27,10 @@ export default function EmployeeCalendar({ absences = [] }) {
             case "congé":
                 bgColor = "#22c55e"; // green-500
                 borderColor = "#16a34a"; // green-600
+                break;
+            case 'personnel':
+                bgColor = "#3b82f6"; // blue-500
+                borderColor = "#2563eb"; // blue-600
                 break;
             default:
                 break;
@@ -46,7 +54,6 @@ export default function EmployeeCalendar({ absences = [] }) {
             allDay: true,
             extendedProps: {
                 justificatif: absence.justificatif,
-                commentaire: absence.commentaire_justificatif,
                 type: absence.type,
             },
         };
@@ -71,6 +78,10 @@ export default function EmployeeCalendar({ absences = [] }) {
                 <div className="flex items-center">
                     <span className="w-4 h-4 mr-2 rounded-full bg-green-500"></span>
                     <span className="text-sm">Congé</span>
+                </div>
+                <div className="flex items-center">
+                    <span className="w-4 h-4 mr-2 rounded-full bg-blue-500"></span>
+                    <span className="text-sm">Personnel</span>
                 </div>
             </div>
 
@@ -98,8 +109,6 @@ export default function EmployeeCalendar({ absences = [] }) {
                         info.event.extendedProps.justificatif === "oui"
                             ? "Oui"
                             : "Non";
-                    const commentaire = info.event.extendedProps.commentaire;
-
                     const tooltip = document.createElement("div");
                     tooltip.classList.add(
                         "bg-gray-800",
@@ -112,11 +121,6 @@ export default function EmployeeCalendar({ absences = [] }) {
                     tooltip.innerHTML = `
                         <div><strong>Type:</strong> ${type}</div>
                         <div><strong>Justifiée:</strong> ${justificatif}</div>
-                        ${
-                            commentaire
-                                ? `<div><strong>Commentaire:</strong> ${commentaire}</div>`
-                                : ""
-                        }
                     `;
 
                     tippy(info.el, {

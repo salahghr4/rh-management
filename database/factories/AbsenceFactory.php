@@ -21,14 +21,9 @@ class AbsenceFactory extends Factory
         $justificatif = $this->faker->randomElement(['oui', 'non']);
         return [
             'date_absence' => $date,
-            'type' => $this->faker->randomElement(['maladie', 'congé', 'non justifiés']),
+            'type' => $this->faker->randomElement(['maladie', 'congé', 'personnel']),
             'employe_id' => User::inRandomOrder()->first()->id ?? User::factory(),
             'justificatif' => $justificatif,
-            'commentaire_justificatif' => $this->faker->text(200),
-            'fichier_justificatif_name' => $justificatif == 'oui' ? $this->faker->word() . '.pdf' : null,
-            'fichier_justificatif_path' => $justificatif == 'oui' ? $this->faker->word() . '.pdf' : null,
-            'fichier_justificatif_mime' => $justificatif == 'oui' ? 'application/pdf' : null,
-            'fichier_justificatif_size' => $justificatif == 'oui' ? $this->faker->numberBetween(1000, 10000) : null,
             'created_at' => $date,
             'updated_at' => now(),
         ];

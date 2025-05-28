@@ -136,7 +136,7 @@ const Index = ({ auth, paies }) => {
         .map((paie) => new Date(paie.date).getFullYear())
         .filter((value, index, self) => self.indexOf(value) === index)
         .map((annee) => ({ text: annee, value: annee })),
-      onFilter: (value, record) => record.annee.startsWith(value),
+      onFilter: (value, record) => record.annee == value,
       render: (annee) => {
         return <Tag>{annee}</Tag>;
       },
@@ -192,19 +192,33 @@ const Index = ({ auth, paies }) => {
       <div className="bg-white mt-5 overflow-auto shadow-sm sm:rounded-lg dark:bg-gray-800 w-['80%']">
         <div className="w-full bg-white flex justify-between p-5 rounded-tr-lg rounded-tl-lg">
           <h2 className="font-bold text-lg">Historique des paiements</h2>
-          <Button
-            type="primary"
-            className="bg-blue-500 hover:bg-blue-600 p-4"
-            onClick={() => exportPDF(data)}
-          >
-            Exporter en PDF
-          </Button>
+          <div className="flex gap-2">
+            <Button
+              color="green"
+              variant="solid"
+              className="p-4"
+              onClick={() => exportPDF(data)}
+            >
+              Exporter en PDF
+            </Button>
+            <Button
+              type="primary"
+              className="bg-blue-500 hover:bg-blue-600 p-4"
+            >
+              <Link href={route("admin.paies.create")}>
+                Ajouter les paiements
+              </Link>
+            </Button>
+          </div>
         </div>
         <div className="overflow-x-auto">
           <Table
             dataSource={data}
             columns={columns}
-            pagination={{ pageSize: 10 }}
+            pagination={{
+              pageSize: 10,
+              showSizeChanger: false,
+            }}
           />
         </div>
       </div>

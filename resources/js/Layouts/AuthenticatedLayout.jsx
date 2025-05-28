@@ -4,6 +4,7 @@ import {
   Banknote,
   Building,
   CalendarCheck,
+  CalendarX,
   ChevronFirst,
   ChevronLast,
   LayoutDashboard,
@@ -13,6 +14,7 @@ import { useEffect, useState } from "react";
 import { Menu, MenuItem, Sidebar } from "react-pro-sidebar";
 import iconImg from "../../Assest/img/logoIcon.png";
 import { router, usePage } from "@inertiajs/react";
+import { Tooltip } from "antd";
 
 export default function Authenticated({ user, header, children }) {
   const [collapsed, setCollapsed] = useState(() =>
@@ -106,61 +108,84 @@ export default function Authenticated({ user, header, children }) {
               },
             }}
           >
-            <MenuItem
-              className="my-3 relative group"
-              icon={<LayoutDashboard size={20} />}
-              active={currentRoute.includes("dashboard")}
-              onClick={() => {
-                router.visit(route(`${routePrefix}.dashboard`));
-              }}
-            >
-              {" "}
-              Dashboard
-            </MenuItem>
-            <MenuItem
-              className="my-3"
-              icon={<Users size={22} />}
-              active={currentRoute.includes("employes")}
-              onClick={() => {
-                router.visit(route(`${routePrefix}.employes.index`));
-              }}
-            >
-              {" "}
-              Employés
-            </MenuItem>
-
-            <MenuItem
-              className="my-3"
-              icon={<CalendarCheck size={24} />}
-              active={currentRoute.includes("conges")}
-              onClick={() => {
-                router.visit(route(`${routePrefix}.conges.index`));
-              }}
-            >
-              Congés
-            </MenuItem>
-
-            <MenuItem
-              className="my-3"
-              icon={<Banknote size={20} />}
-              active={currentRoute.includes("paie")}
-              onClick={() => {
-                router.visit(route(`${routePrefix}.paies.index`));
-              }}
-            >
-              Paies
-            </MenuItem>
-            {routePrefix === "admin" && (
+            <Tooltip placement="right" title="Dashboard" color="blue">
               <MenuItem
-                className="my-3"
-                icon={<Building size={20} />}
-                active={currentRoute.includes("departements")}
+                className="my-3 relative group"
+                icon={<LayoutDashboard size={20} />}
+                active={currentRoute.includes("dashboard")}
                 onClick={() => {
-                  router.visit(route(`${routePrefix}.departements.index`));
+                  router.visit(route(`${routePrefix}.dashboard`));
                 }}
               >
-                Départements
+                {" "}
+                Dashboard
               </MenuItem>
+            </Tooltip>
+            <Tooltip placement="right" title="Employés" color="blue">
+              <MenuItem
+                className="my-3"
+                icon={<Users size={22} />}
+                active={currentRoute.includes("employes")}
+                onClick={() => {
+                  router.visit(route(`${routePrefix}.employes.index`));
+                }}
+              >
+                {" "}
+                Employés
+              </MenuItem>
+            </Tooltip>
+            <Tooltip placement="right" title="Congés" color="blue">
+              <MenuItem
+                className="my-3"
+                icon={<CalendarCheck size={24} />}
+                active={currentRoute.includes("conges")}
+                onClick={() => {
+                  router.visit(route(`${routePrefix}.conges.index`));
+                }}
+              >
+                Congés
+              </MenuItem>
+            </Tooltip>
+
+            <Tooltip placement="right" title="Paie" color="blue">
+              <MenuItem
+                className="my-3"
+                icon={<Banknote size={20} />}
+                active={currentRoute.includes("paie")}
+                onClick={() => {
+                  router.visit(route(`${routePrefix}.paies.index`));
+                }}
+              >
+                Paies
+              </MenuItem>
+            </Tooltip>
+            {routePrefix === "admin" && (
+              <Tooltip placement="right" title="Départements" color="blue">
+                <MenuItem
+                  className="my-3"
+                  icon={<Building size={20} />}
+                  active={currentRoute.includes("departements")}
+                  onClick={() => {
+                    router.visit(route(`${routePrefix}.departements.index`));
+                  }}
+                >
+                  Départements
+                </MenuItem>
+              </Tooltip>
+            )}
+            {routePrefix === "admin" && (
+              <Tooltip placement="right" title="Absences" color="blue">
+                <MenuItem
+                  className="my-3"
+                  icon={<CalendarX size={20} />}
+                  active={currentRoute.includes("absences")}
+                  onClick={() => {
+                    router.visit(route(`${routePrefix}.absences.index`));
+                  }}
+                >
+                  Absences
+                </MenuItem>
+              </Tooltip>
             )}
           </Menu>
         </Sidebar>
