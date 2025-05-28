@@ -1,8 +1,10 @@
+import { InboxOutlined } from "@ant-design/icons";
 import { Link, router, usePage } from "@inertiajs/react";
+import Dragger from "antd/es/upload/Dragger";
 import { ArrowLeft } from "lucide-react";
 import { useEffect, useState } from "react";
 
-export default function EditForm({ employe, departements }) {
+export default function EditForm({ employe, departements, documents }) {
   const [activeTab, setActiveTab] = useState("personal");
   const [formData, setFormData] = useState({
     nom: employe.nom || "",
@@ -20,6 +22,7 @@ export default function EditForm({ employe, departements }) {
     joures_conges_restant: employe.joures_conges_restant || 18,
     password: "",
     password_confirmation: "",
+    documents: documents || [],
   });
 
   const { errors } = usePage().props;
@@ -62,7 +65,31 @@ export default function EditForm({ employe, departements }) {
     router.put(route("admin.employes.update", employe.id), formData);
   };
 
-  // Check if a tab is completed to show the checkmark
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+
+  //   const data = new FormData();
+
+  //   Object.entries(formData).forEach(([key, value]) => {
+  //     data.append(key, value ?? "");
+  //   });
+
+  //   uploadedFiles.forEach((file) => {
+  //     if (!file.existing) {
+  //       data.append("documents[]", file);
+  //     }
+  //   });
+
+  // ✅ Add forceFormData: true
+  //   router.put(route("admin.employes.update", employe.id), data, {
+  //     forceFormData: true,
+  //     preserveScroll: true,
+  //     onError: (errors) => {
+  //       console.log("Form errors:", errors);
+  //     },
+  //   });
+  // };
+
   const isTabCompleted = (tab) => {
     switch (tab) {
       case "personal":
@@ -86,6 +113,30 @@ export default function EditForm({ employe, departements }) {
       default:
         return false;
     }
+  };
+  const initialFiles = documents.map((doc) => ({
+    uid: doc.id.toString(),
+    name: doc.filename,
+    status: "done",
+    url: `/storage/${doc.file_path}`,
+    existing: true,
+  }));
+  const [uploadedFiles, setUploadedFiles] = useState(initialFiles);
+  const uploadProps = {
+    multiple: true,
+    beforeUpload: (file) => {
+      file.status = "done";
+      setUploadedFiles((prev) => [...prev, file]);
+      return false;
+    },
+    onRemove: (file) => {
+      setUploadedFiles((prev) => prev.filter((f) => f.uid !== file.uid));
+    },
+    fileList: uploadedFiles,
+    showUploadList: {
+      showDownloadIcon: true,
+      showRemoveIcon: true,
+    },
   };
 
   return (
@@ -214,7 +265,26 @@ export default function EditForm({ employe, departements }) {
                   <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-pink-500 to-red-500"></div>
                 )}
               </button>
-
+              <button
+                onClick={() => setActiveTab("document")}
+                className={`flex-1 py-4 px-6 text-center relative ${
+                  activeTab === "document"
+                    ? "text-green-600"
+                    : "text-gray-500 hover:text-gray-700"
+                }`}
+              >
+                <span className="flex justify-center items-center space-x-2">
+                  <span className="flex items-center justify-center w-8 h-8 rounded-full bg-green-100 text-green-600">
+                    📄
+                  </span>
+                  <span className="hidden sm:inline font-medium">
+                    Documents
+                  </span>
+                </span>
+                {activeTab === "document" && (
+                  <div className="absolute bottom-0 left-0 right-0 h-1 bg-green-500"></div>
+                )}
+              </button>
               <button
                 onClick={() => setActiveTab("admin")}
                 className={`flex-1 py-4 px-6 text-center relative ${
@@ -775,6 +845,25 @@ export default function EditForm({ employe, departements }) {
                 </div>
               </div>
             )}
+            {/* Documents Tab */}
+            {activeTab === "document" && (
+              <div className="p-4">
+                <h2 className="text-lg font-semibold mb-2">Documents</h2>
+
+                <Dragger {...uploadProps} style={{ padding: "1rem" }}>
+                  <p className="ant-upload-drag-icon">
+                    <InboxOutlined />
+                  </p>
+                  <p className="ant-upload-text">
+                    Cliquez ou glissez les fichiers ici pour les télécharger
+                  </p>
+                  <p className="ant-upload-hint">
+                    Supporte l’upload multiple. Pas de données sensibles, s’il
+                    vous plaît.
+                  </p>
+                </Dragger>
+              </div>
+            )}
 
             {/* Administrative Tab */}
             {activeTab === "admin" && (
@@ -1036,11 +1125,12 @@ export default function EditForm({ employe, departements }) {
                 {activeTab !== "admin" && (
                   <button
                     type="button"
-                    onClick={() =>
-                      setActiveTab(
-                        activeTab === "personal" ? "employment" : "admin"
-                      )
-                    }
+                    onClick={() => {
+                      if (activeTab === "personal") setActiveTab("employment");
+                      else if (activeTab === "employment")
+                        setActiveTab("document");
+                      else if (activeTab === "document") setActiveTab("admin");
+                    }}
                     className="px-6 py-2 bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded-lg shadow-md hover:from-cyan-600 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                   >
                     <span className="flex items-center">

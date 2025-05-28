@@ -37,6 +37,7 @@ class UpdateEmployeRequest extends FormRequest
             'departement_id' => ['nullable', 'exists:departements,id'],
             'joures_conges_restant' => ['required', 'integer', 'min:0', 'max:18'],
             'password' => ['nullable', 'string', 'min:8', 'confirmed'],
+            'documents.*' => 'nullable|file|mimes:pdf,jpg,jpeg,png,doc,docx',
         ];
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\User;
+use App\Models\Document;
 use App\Models\Departement;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreEmployeRequest;
@@ -38,7 +39,18 @@ class EmployeController extends Controller
     {
         $validated = $request->validated();
         $validated['password'] = bcrypt($validated['password']);
-        User::create($validated);
+        $user = User::create($validated);
+        if ($request->hasFile('documents')) {
+            foreach ($request->file('documents') as $index => $file) {
+                $path = $file->store('documents', 'public');
+
+                Document::create([
+                    'employe_id' => $user->id,
+                    'file_path' => $path,
+                    'filename' => $file->getClientOriginalName(),
+                ]);
+            }
+        }
         return redirect()->route('admin.employes.index')->with('success', 'Employé créé avec succès');
     }
 
@@ -62,7 +74,8 @@ class EmployeController extends Controller
         $employe = User::with('departement')->find($employe->id);
         return inertia('Admin/Employes/Edit', [
             'employe' => $employe,
-            'departements' => Departement::all()
+            'departements' => Departement::all(),
+            'documents' => $employe->documents,
         ]);
     }
 
@@ -71,6 +84,7 @@ class EmployeController extends Controller
      */
     public function update(UpdateEmployeRequest $request, User $employe)
     {
+        dd($request);
         $validated = $request->validated();
 
         // Only hash the password if provided
@@ -80,7 +94,22 @@ class EmployeController extends Controller
             unset($validated['password']);
         }
 
+        
         $employe->update($validated);
+        
+        if ($request->hasFile('documents')) {
+            $employe->documents()->delete();
+            // foreach ($request->file('documents') as $file) {
+            //     $path = $file->store('documents', 'public');
+
+            //     Document::create([
+            //         'employe_id' => $employe->id,
+            //         'file_path' => $path,
+            //         'filename' => $file->getClientOriginalName(),
+            //     ]);
+            // }
+        }
+
 
         return redirect()->route('admin.employes.show', $employe->id)->with('success', 'Employé mis à jour avec succès');
     }

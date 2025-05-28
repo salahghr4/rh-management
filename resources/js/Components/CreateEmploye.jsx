@@ -1,6 +1,9 @@
 import { Link, router, usePage } from "@inertiajs/react";
+import Dragger from "antd/es/upload/Dragger";
 import { ArrowLeft } from "lucide-react";
+import { InboxOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
+import { Select } from "antd";
 
 export default function CreateForm({ departements }) {
   const [activeTab, setActiveTab] = useState("personal");
@@ -59,13 +62,20 @@ export default function CreateForm({ departements }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    router.post(route("admin.employes.store"), formData, {
-      onSuccess: () => {
-        router.visit(route("admin.employes.index"));
-      },
-      onError: (errors) => {
-        console.error("Form submission errors:", errors);
-      },
+
+    const data = new FormData();
+    Object.entries(formData).forEach(([key, value]) => {
+      data.append(key, value);
+    });
+
+    uploadedFiles.forEach((file) => {
+      data.append("documents[]", file);
+    });
+
+    router.post(route("admin.employes.store"), data, {
+      forceFormData: true,
+      onSuccess: () => router.visit(route("admin.employes.index")),
+      onError: (errors) => console.error("Form submission errors:", errors),
     });
   };
 
@@ -93,6 +103,19 @@ export default function CreateForm({ departements }) {
       default:
         return false;
     }
+  };
+
+  const [uploadedFiles, setUploadedFiles] = useState([]);
+  const uploadProps = {
+    multiple: true,
+    beforeUpload: (file) => {
+      setUploadedFiles((prev) => [...prev, file]);
+      return false;
+    },
+    onRemove: (file) => {
+      setUploadedFiles((prev) => prev.filter((f) => f.uid !== file.uid));
+    },
+    fileList: uploadedFiles,
   };
 
   return (
@@ -222,6 +245,27 @@ export default function CreateForm({ departements }) {
               </button>
 
               <button
+                onClick={() => setActiveTab("document")}
+                className={`flex-1 py-4 px-6 text-center relative ${
+                  activeTab === "document"
+                    ? "text-green-600"
+                    : "text-gray-500 hover:text-gray-700"
+                }`}
+              >
+                <span className="flex justify-center items-center space-x-2">
+                  <span className="flex items-center justify-center w-8 h-8 rounded-full bg-green-100 text-green-600">
+                    📄
+                  </span>
+                  <span className="hidden sm:inline font-medium">
+                    Documents
+                  </span>
+                </span>
+                {activeTab === "document" && (
+                  <div className="absolute bottom-0 left-0 right-0 h-1 bg-green-500"></div>
+                )}
+              </button>
+
+              <button
                 onClick={() => setActiveTab("admin")}
                 className={`flex-1 py-4 px-6 text-center relative ${
                   activeTab === "admin"
@@ -281,8 +325,30 @@ export default function CreateForm({ departements }) {
             </div>
           </div>
 
+          {/* Document Tab */}
+
+          {activeTab === "document" && (
+            <div className="p-4">
+              <h2 className="text-lg font-semibold mb-2">Documents</h2>
+
+              <Dragger {...uploadProps} style={{ padding: "1rem" }}>
+                <p className="ant-upload-drag-icon">
+                  <InboxOutlined />
+                </p>
+                <p className="ant-upload-text">
+                  Cliquez ou glissez les fichiers ici pour les télécharger
+                </p>
+                <p className="ant-upload-hint">
+                  Supporte l’upload multiple. Pas de données sensibles, s’il
+                  vous plaît.
+                </p>
+              </Dragger>
+            </div>
+          )}
+
+          {/* Personal Tab */}
+
           <form onSubmit={handleSubmit} className="p-6 mt-3">
-            {/* Personal Tab */}
             {activeTab === "personal" && (
               <div className="space-y-6 transition-all duration-500 ease-in-out">
                 <div className="flex flex-col md:flex-row gap-6">
@@ -1044,11 +1110,12 @@ export default function CreateForm({ departements }) {
                 {activeTab !== "admin" && (
                   <button
                     type="button"
-                    onClick={() =>
-                      setActiveTab(
-                        activeTab === "personal" ? "employment" : "admin"
-                      )
-                    }
+                    onClick={() => {
+                      if (activeTab === "personal") setActiveTab("employment");
+                      else if (activeTab === "employment")
+                        setActiveTab("document");
+                      else if (activeTab === "document") setActiveTab("admin");
+                    }}
                     className="px-6 py-2 bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded-lg shadow-md hover:from-cyan-600 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                   >
                     <span className="flex items-center">
