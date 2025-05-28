@@ -5,7 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Models\User;
 use App\Models\Document;
 use App\Models\Departement;
+use Illuminate\Support\Str;
+use App\Mail\WelcomeEmployeeMail;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Mail;
 use App\Http\Requests\StoreEmployeRequest;
 use App\Http\Requests\UpdateEmployeRequest;
 
@@ -38,7 +41,8 @@ class EmployeController extends Controller
     public function store(StoreEmployeRequest $request)
     {
         $validated = $request->validated();
-        $validated['password'] = bcrypt($validated['password']);
+        $plainPassword = $validated['password'] ?? Str::random(10);
+        $validated['password'] = bcrypt($plainPassword);
         $user = User::create($validated);
         if ($request->hasFile('documents')) {
             foreach ($request->file('documents') as $index => $file) {
@@ -51,6 +55,7 @@ class EmployeController extends Controller
                 ]);
             }
         }
+        Mail::to($user->email)->send(new WelcomeEmployeeMail($user, $plainPassword));
         return redirect()->route('admin.employes.index')->with('success', 'Employé créé avec succès');
     }
 
@@ -84,7 +89,6 @@ class EmployeController extends Controller
      */
     public function update(UpdateEmployeRequest $request, User $employe)
     {
-        dd($request);
         $validated = $request->validated();
 
         // Only hash the password if provided
