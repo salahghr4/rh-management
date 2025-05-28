@@ -15,7 +15,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('employe_id')->constrained('users')->onDelete('cascade');
             $table->string('file_path');
-            $table->string('filename');
+            $table->string('file_name');
+            $table->unsignedBigInteger('file_size')->nullable();
+            $table->string('file_extension')->nullable();
             $table->timestamps();
         });
     }

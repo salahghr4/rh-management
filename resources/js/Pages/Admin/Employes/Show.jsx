@@ -1,5 +1,5 @@
-import React from "react";
-import { Head, Link } from "@inertiajs/react";
+import React, { useState } from "react";
+import { Head, Link, router } from "@inertiajs/react";
 import {
   ArrowLeft,
   Edit,
@@ -14,10 +14,77 @@ import {
   Clock,
   CalendarDays,
   FileText,
+  Paperclip,
+  FileIcon,
+  Download,
+  Trash,
+  ImageIcon,
 } from "lucide-react";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
+import { Button, message, Modal } from "antd";
+import { InboxOutlined } from "@ant-design/icons";
+import Dragger from "antd/es/upload/Dragger";
 
-const Show = ({ auth, employe }) => {
+const Show = ({ auth, employe, documents }) => {
+  const [isAddDocModalOpen, setIsAddDocModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [documentToDelete, setDocumentToDelete] = useState(null);
+
+  const handleDeleteDoc = () => {
+    if (!documentToDelete) return;
+    router.delete(
+      route("admin.employes.documents.destroy", {
+        employe: employe.id,
+        document: documentToDelete.id,
+      }),
+      {
+        onSuccess: () => {
+          setIsDeleteModalOpen(false);
+          setDocumentToDelete(null);
+          message.success("Document supprimé avec succès !");
+        },
+        onError: (errors) => {
+          console.error("Error deleting document:", errors);
+          message.error("Erreur lors de la suppression du document.");
+        },
+      }
+    );
+  };
+
+  const [uploadedFiles, setUploadedFiles] = useState([]);
+  const uploadProps = {
+    multiple: true,
+    beforeUpload: (file) => {
+      setUploadedFiles((prev) => [...prev, file]);
+      return false;
+    },
+    onRemove: (file) => {
+      setUploadedFiles((prev) => prev.filter((f) => f.uid !== file.uid));
+    },
+    fileList: uploadedFiles,
+  };
+
+  const handleAddDoc = (e) => {
+    e.preventDefault();
+
+    const data = new FormData();
+
+    uploadedFiles.forEach((file) => {
+      data.append("documents[]", file);
+    });
+
+    router.post(route("admin.employes.documents.store", employe.id), data, {
+      forceFormData: true,
+      onSuccess: () => router.visit(route("admin.employes.show", employe.id)),
+      onFinish: () => {
+        setIsAddDocModalOpen(false);
+        setUploadedFiles([]);
+        message.success("Documents ajoutés avec succès !");
+      },
+      onError: (errors) => console.error("Form submission errors:", errors),
+    });
+  };
+
   const getBadgeColor = (status) => {
     return status === "actif"
       ? "bg-green-100 text-green-600"
@@ -40,6 +107,16 @@ const Show = ({ auth, employe }) => {
         return "bg-cyan-100 text-cyan-600";
       default:
         return "bg-gray-100 text-gray-600";
+    }
+  };
+
+  const formatFileSize = (bytes) => {
+    if (bytes < 1024) {
+      return `${bytes} B`;
+    } else if (bytes < 1024 * 1024) {
+      return `${(bytes / 1024).toFixed(1)} KB`;
+    } else {
+      return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
     }
   };
 
@@ -204,6 +281,128 @@ const Show = ({ auth, employe }) => {
                   ))}
                 </div>
               </div>
+              <div className="bg-white rounded-2xl shadow p-6 ">
+                <div className="flex items-center justify-between flex-wrap gap-2 mb-4">
+                  <h2 className="text-xl font-semibold mb-4 text-gray-800 flex items-center">
+                    <Paperclip className="inline h-5 w-5 mr-2 text-gray-600" />
+                    Documents
+                  </h2>
+                  <Button
+                    type="primary"
+                    className="mb-4"
+                    onClick={() => setIsAddDocModalOpen(true)}
+                  >
+                    <Paperclip className="inline h-4 w-4 mr-2" />
+                    Ajouter un document
+                  </Button>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-2">
+                  {documents.map((doc) => {
+                    const isImage = [
+                      "jpg",
+                      "jpeg",
+                      "png",
+                      "gif",
+                      "svg",
+                      "avif",
+                      "webp",
+                    ].includes(doc.file_extension);
+                    const isPdf = doc.file_extension === "pdf";
+
+                    return (
+                      <div
+                        key={doc.id}
+                        className="group relative flex flex-col gap-2 rounded-lg border bg-white transition-all hover:border-primary/50 hover:shadow-md"
+                      >
+                        {/* Preview Section */}
+                        <div className="relative aspect-[3/2] w-full overflow-hidden rounded-t-lg bg-gray-100">
+                          {isImage ? (
+                            <img
+                              src={doc.file_path}
+                              alt={doc.file_name}
+                              className="h-full w-full object-cover transition-transform group-hover:scale-105"
+                            />
+                          ) : (
+                            <div className="flex h-full items-center justify-center">
+                              {isPdf ? (
+                                <FileText className="h-16 w-16 text-muted-foreground" />
+                              ) : (
+                                <FileIcon className="h-16 w-16 text-muted-foreground" />
+                              )}
+                            </div>
+                          )}
+
+                          {/* Overlay with actions */}
+                          <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-black/60 opacity-0 transition-opacity group-hover:opacity-100">
+                            {(isImage || isPdf) && (
+                              <Button
+                                variant="solid"
+                                color="primary"
+                                title="View document"
+                                size="sm"
+                                className="h-8"
+                                onClick={() =>
+                                  window.open(doc.file_path, "_blank")
+                                }
+                              >
+                                <ImageIcon className="mr-2 h-4 w-4" />
+                                View
+                              </Button>
+                            )}
+                            <a
+                              className="flex items-center gap-2 text-white bg-blue-500 hover:bg-blue-400 px-4 py-2 rounded-md text-sm cursor-pointer"
+                              title="Download document"
+                              href={route("admin.employes.documents.download", {
+                                employe: employe.id,
+                                document: doc.id,
+                              })}
+                            >
+                              <Download className="mr-2 h-4 w-4" />
+                              Download
+                            </a>
+                          </div>
+                        </div>
+
+                        {/* Info Section */}
+                        <div className="flex flex-col gap-2 p-3">
+                          <div className="flex items-start justify-between gap-2">
+                            <div className="flex-1 min-w-0">
+                              <p
+                                className="text-sm font-medium truncate"
+                                title={doc.file_name}
+                              >
+                                {doc.file_name}
+                              </p>
+                              <div className="mt-1 flex items-center gap-2 text-xs text-gray-500">
+                                <span
+                                  className="truncate"
+                                  title={doc.file_extension}
+                                >
+                                  {doc.file_extension.toUpperCase()}
+                                </span>
+                                <span>•</span>
+                                <span>{formatFileSize(doc.file_size)}</span>
+                              </div>
+                            </div>
+                            <Button
+                              variant="filled"
+                              color="danger"
+                              icon={<Trash className="h-4 w-4" />}
+                              size="icon"
+                              className="h-8 w-8 shrink-0 hover:bg-destructive/10 hover:text-destructive"
+                              title="Delete document"
+                              onClick={() => {
+                                setDocumentToDelete(doc);
+                                setIsDeleteModalOpen(true);
+                              }}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
             </div>
 
             {/* Sidebar */}
@@ -275,6 +474,46 @@ const Show = ({ auth, employe }) => {
           </div>
         </div>
       </div>
+      {/* Add document Modal */}
+      <Modal
+        title="Ajouter un document"
+        open={isAddDocModalOpen}
+        centered
+        onOk={handleAddDoc}
+        onCancel={() => {
+          setIsAddDocModalOpen(false);
+          setUploadedFiles([]);
+        }}
+        okText={"Ajouter"}
+        okButtonProps={{ disabled: uploadedFiles.length === 0 }}
+        cancelText="Annuler"
+      >
+        <Dragger {...uploadProps} style={{ padding: "1rem" }}>
+          <p className="ant-upload-drag-icon">
+            <InboxOutlined />
+          </p>
+          <p className="ant-upload-text">
+            Cliquez ou glissez les fichiers ici pour les télécharger
+          </p>
+          <p className="ant-upload-hint">
+            Supporte l'upload multiple. Pas de données sensibles, s'il vous
+            plaît.
+          </p>
+        </Dragger>
+      </Modal>
+
+      <Modal
+        title="Confirmer la suppression"
+        open={isDeleteModalOpen}
+        centered
+        onOk={handleDeleteDoc}
+        onCancel={() => setIsDeleteModalOpen(false)}
+        okText="Supprimer"
+        cancelText="Annuler"
+        okButtonProps={{ danger: true }}
+      >
+        <p>Êtes-vous sûr de vouloir supprimer ce document ?</p>
+      </Modal>
     </AuthenticatedLayout>
   );
 };

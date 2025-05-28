@@ -4,7 +4,7 @@ import Dragger from "antd/es/upload/Dragger";
 import { ArrowLeft } from "lucide-react";
 import { useEffect, useState } from "react";
 
-export default function EditForm({ employe, departements, documents }) {
+export default function EditForm({ employe, departements }) {
   const [activeTab, setActiveTab] = useState("personal");
   const [formData, setFormData] = useState({
     nom: employe.nom || "",

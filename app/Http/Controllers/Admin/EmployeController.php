@@ -8,6 +8,7 @@ use App\Models\Departement;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreEmployeRequest;
 use App\Http\Requests\UpdateEmployeRequest;
+use Illuminate\Support\Facades\Storage;
 
 class EmployeController extends Controller
 {
@@ -39,15 +40,20 @@ class EmployeController extends Controller
     {
         $validated = $request->validated();
         $validated['password'] = bcrypt($validated['password']);
+
         $user = User::create($validated);
+
         if ($request->hasFile('documents')) {
-            foreach ($request->file('documents') as $index => $file) {
-                $path = $file->store('documents', 'public');
+            foreach ($request->file('documents') as $file) {
+
+                $path = $file->store('documents/employe-'. $user->id, 'public');
 
                 Document::create([
                     'employe_id' => $user->id,
                     'file_path' => $path,
-                    'filename' => $file->getClientOriginalName(),
+                    'file_name' => $file->getClientOriginalName(),
+                    'file_size' => $file->getSize(),
+                    'file_extension' => $file->getClientOriginalExtension(),
                 ]);
             }
         }
@@ -62,7 +68,16 @@ class EmployeController extends Controller
         // get the employe with the departement
         $employe = User::with('departement')->find($employe->id);
         return inertia('Admin/Employes/Show', [
-            'employe' => $employe
+            'employe' => $employe,
+            "documents" => $employe->documents->map(function ($document) {
+                return [
+                    'id' => $document->id,
+                    'file_name' => $document->file_name,
+                    'file_size' => $document->file_size,
+                    'file_extension' => $document->file_extension,
+                    'file_path' => Storage::url($document->file_path),
+                ];
+            }),
         ]);
     }
 
@@ -75,7 +90,6 @@ class EmployeController extends Controller
         return inertia('Admin/Employes/Edit', [
             'employe' => $employe,
             'departements' => Departement::all(),
-            'documents' => $employe->documents,
         ]);
     }
 
@@ -94,22 +108,7 @@ class EmployeController extends Controller
             unset($validated['password']);
         }
 
-
         $employe->update($validated);
-
-        if ($request->hasFile('documents')) {
-            $employe->documents()->delete();
-            // foreach ($request->file('documents') as $file) {
-            //     $path = $file->store('documents', 'public');
-
-            //     Document::create([
-            //         'employe_id' => $employe->id,
-            //         'file_path' => $path,
-            //         'filename' => $file->getClientOriginalName(),
-            //     ]);
-            // }
-        }
-
 
         return redirect()->route('admin.employes.show', $employe->id)->with('success', 'Employé mis à jour avec succès');
     }
@@ -132,5 +131,21 @@ class EmployeController extends Controller
         $employe->status = "actif";
         $employe->save();
         return redirect()->route('admin.employes.index')->with('success', 'Employé supprimé avec succès');
+    }
+
+    /**
+     * Download the specified document.
+     */
+    public function downloadDocument(User $employe, Document $document)
+    {
+        // Check if the document belongs to the employe
+        if ($document->employe_id !== $employe->id) {
+            return redirect()->back()->with('error', 'Document non trouvé pour cet employé.');
+        }
+
+        $fileName = $document->file_name;
+
+        // Return the file as a download response
+        return response()->download(public_path('storage/' . $document->file_path), $document->file_name);
     }
 }

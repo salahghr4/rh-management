@@ -9,6 +9,7 @@ use App\Http\Controllers\Employe\CongesController;
 use App\Http\Controllers\Employe\EmployeController;
 use App\Http\Controllers\Admin\DepartementController;
 use App\Http\Controllers\Admin\CongesController as AdminCongesController;
+use App\Http\Controllers\Admin\DocumentController;
 use App\Http\Controllers\Admin\EmployeController as AdminEmployeController;
 use App\Http\Controllers\Admin\PaieController as AdminPaieController;
 use App\Http\Controllers\Employe\PaieController;
@@ -27,6 +28,9 @@ Route::prefix('admin')->middleware(['auth', 'checkRole:admin,rh'])->name('admin.
   Route::get('/paies/create', [AdminPaieController::class, 'create'])->name('paies.create');
   Route::post('/paies', [AdminPaieController::class, 'store'])->name('paies.store');
   Route::resource('/absences', AbsenceController::class)->except('show')->names('absences');
+  Route::get('/employes/{employe}/documents/{document}/download', [DocumentController::class, 'downloadDocument'])->name('employes.documents.download');
+  Route::post('/employes/{employe}/documents', [DocumentController::class, 'store'])->name('employes.documents.store');
+  Route::delete('/employes/{employe}/documents/{document}', [DocumentController::class, 'destroy'])->name('employes.documents.destroy');
 });
 
 Route::prefix('employe')->middleware(['auth', 'checkRole:employe,manager'])->name('employe.')->group(function () {
