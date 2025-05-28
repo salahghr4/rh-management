@@ -3,7 +3,6 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head } from "@inertiajs/react";
 
 const Edit = ({ auth, employe, departements , documents }) => {
-    console.log(documents);
 
     return (
         <AuthenticatedLayout user={auth.user}>
