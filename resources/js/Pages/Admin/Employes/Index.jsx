@@ -1,12 +1,8 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { ExclamationCircleFilled } from "@ant-design/icons";
 import { Head, Link, router } from "@inertiajs/react";
-import { Modal, Table, Tag } from "antd";
-import {
-  Edit,
-  UserRoundCheck,
-  UserRoundX
-} from "lucide-react";
+import { message, Modal, Table, Tag } from "antd";
+import { Edit, UserRoundCheck, UserRoundX } from "lucide-react";
 
 const Index = ({ auth, employes }) => {
   // console.log(employes);
@@ -35,6 +31,12 @@ const Index = ({ auth, employes }) => {
       onOk() {
         router.delete(route("admin.employes.destroy", id), {
           preserveScroll: true,
+          onSuccess: () => {
+            message.success("Employé désactivé avec succès !");
+          },
+          onError: () => {
+            message.error("Erreur lors de la désactivation de l'employé.");
+          },
         });
       },
     });
@@ -54,9 +56,20 @@ const Index = ({ auth, employes }) => {
       width: 500,
       centered: true,
       onOk() {
-        router.put(route("admin.employes.activer", id), {
-          preserveScroll: true,
-        });
+        router.put(
+          route("admin.employes.activer", id),
+          {
+            preserveScroll: true,
+          },
+          {
+            onSuccess: () => {
+              message.success("Employé activé avec succès !");
+            },
+            onError: () => {
+              message.error("Erreur lors de l'activation de l'employé.");
+            },
+          }
+        );
       },
     });
   };
@@ -185,7 +198,7 @@ const Index = ({ auth, employes }) => {
               className="text-gray-500 me-2 hover:text-gray-700"
               title="Activer l'employé"
             >
-              <UserRoundCheck size={20} className="text-green-500"/>
+              <UserRoundCheck size={20} className="text-green-500" />
             </button>
           )}
         </div>
@@ -209,7 +222,7 @@ const Index = ({ auth, employes }) => {
     telephone: employee.telephone,
     type_contrat: employee.type_contrat,
   }));
-  
+
   return (
     <AuthenticatedLayout user={auth.user}>
       <Head title="Employés" />

@@ -1,6 +1,6 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, router, usePage } from "@inertiajs/react";
-import { DatePicker, Select } from "antd";
+import { DatePicker, message, Select } from "antd";
 import { User } from "lucide-react";
 import { useState } from "react";
 import dayjs from "dayjs";
@@ -23,6 +23,7 @@ export default function Edit({ auth, absence, employes }) {
           employe_id: "",
           justificatif: "non",
         });
+        message.success("Absence mise à jour avec succès !");
       },
     });
   };

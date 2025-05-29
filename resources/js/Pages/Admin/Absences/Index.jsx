@@ -1,6 +1,6 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link, router } from "@inertiajs/react";
-import { Button, Modal, Space, Table, Tag } from "antd";
+import { Button, message, Modal, Space, Table, Tag } from "antd";
 import { Edit, Trash } from "lucide-react";
 import { useState } from "react";
 
@@ -13,6 +13,7 @@ const Index = ({ auth, absences }) => {
       onSuccess: () => {
         setShowDeleteModal(false);
         setSelectedAbsence(null);
+        message.success("Absence supprimée avec succès !");
       },
     });
   };

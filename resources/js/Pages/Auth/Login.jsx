@@ -7,6 +7,7 @@ import { Head, Link, useForm } from "@inertiajs/react";
 import { useEffect } from "react";
 import { TERipple } from "tw-elements-react";
 import img from "../../../Assest/img/authImg.avif";
+import { message } from "antd";
 
 export default function Login({ status, canResetPassword }) {
   const { data, setData, post, processing, errors, reset } = useForm({
@@ -24,7 +25,11 @@ export default function Login({ status, canResetPassword }) {
   const submit = (e) => {
     e.preventDefault();
 
-    post(route("login"));
+    post(route("login"), {
+      onSuccess: () => {
+        message.success("Connexion réussie !");
+      }
+    });
   };
 
   return (

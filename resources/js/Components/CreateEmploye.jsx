@@ -3,7 +3,7 @@ import Dragger from "antd/es/upload/Dragger";
 import { ArrowLeft } from "lucide-react";
 import { InboxOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
-import { Select } from "antd";
+import { message, Select } from "antd";
 
 export default function CreateForm({ departements }) {
   const [activeTab, setActiveTab] = useState("personal");
@@ -74,8 +74,13 @@ export default function CreateForm({ departements }) {
 
     router.post(route("admin.employes.store"), data, {
       forceFormData: true,
-      onSuccess: () => router.visit(route("admin.employes.index")),
-      onError: (errors) => console.error("Form submission errors:", errors),
+      onSuccess: () => {
+        router.visit(route("admin.employes.index"));
+        message.success("Employé créé avec succès !");
+      },
+      onError: (errors) => {
+        message.error("Erreur lors de la création de l'employé.");
+      },
     });
   };
 

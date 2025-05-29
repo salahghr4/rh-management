@@ -27,7 +27,7 @@ class UpdateEmployeRequest extends FormRequest
             'prenom' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255', Rule::unique('users')->ignore($this->employe)],
             'adresse' => ['required', 'string', 'max:255'],
-            'telephone' => ['required', 'string', 'max:15'],
+            'telephone' => ['required', 'string', 'max:20'],
             'date_embauche' => ['required', 'date'],
             'poste' => ['required', 'string', 'max:255'],
             'type_contrat' => ['required', Rule::in(['CDI', 'CDD'])],

@@ -1,5 +1,6 @@
 import { InboxOutlined } from "@ant-design/icons";
 import { Link, router, usePage } from "@inertiajs/react";
+import { message } from "antd";
 import Dragger from "antd/es/upload/Dragger";
 import { ArrowLeft } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -61,7 +62,14 @@ export default function EditForm({ employe, departements }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    router.put(route("admin.employes.update", employe.id), formData);
+    router.put(route("admin.employes.update", employe.id), formData, {
+      onSuccess: () => {
+        message.success("Employé mis à jour avec succès !");
+      },
+      onError: () => {
+        message.error("Erreur lors de la mise à jour de l'employé.");
+      },
+    });
   };
 
   const isTabCompleted = (tab) => {
