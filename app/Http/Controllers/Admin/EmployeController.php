@@ -81,6 +81,7 @@ class EmployeController extends Controller
                     'file_path' => Storage::url($document->file_path),
                 ];
             }),
+            'paies' => $employe->paies()->latest()->get(),
         ]);
     }
 
@@ -122,7 +123,7 @@ class EmployeController extends Controller
     {
         $employe->status = "inactif";
         $employe->save();
-        return redirect()->route('admin.employes.index')->with('success', 'Employé supprimé avec succès');
+        return redirect()->back()->with('success', 'Employé supprimé avec succès');
     }
 
     /**
@@ -132,7 +133,7 @@ class EmployeController extends Controller
     {
         $employe->status = "actif";
         $employe->save();
-        return redirect()->route('admin.employes.index')->with('success', 'Employé supprimé avec succès');
+        return redirect()->back()->with('success', 'Employé activé avec succès');
     }
 
     /**

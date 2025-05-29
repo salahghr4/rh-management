@@ -1,34 +1,94 @@
-import React, { useState } from "react";
+import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
+import { InboxOutlined } from "@ant-design/icons";
 import { Head, Link, router } from "@inertiajs/react";
+import { Button, message, Modal } from "antd";
+import Dragger from "antd/es/upload/Dragger";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 import {
   ArrowLeft,
-  Edit,
-  User,
-  Mail,
-  Phone,
-  Home,
   Briefcase,
   Building2,
   Calendar,
-  DollarSign,
   Clock,
-  CalendarDays,
-  FileText,
-  Paperclip,
-  FileIcon,
+  DollarSign,
   Download,
-  Trash,
+  Edit,
+  FileIcon,
+  FileText,
+  Home,
   ImageIcon,
+  Mail,
+  Paperclip,
+  Phone,
+  Trash,
+  User,
+  UserRoundCheck,
+  UserRoundX,
 } from "lucide-react";
-import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { Button, message, Modal } from "antd";
-import { InboxOutlined } from "@ant-design/icons";
-import Dragger from "antd/es/upload/Dragger";
+import { useState } from "react";
+import logo from "../../../../Assest/img/rhLogo.png";
 
-const Show = ({ auth, employe, documents }) => {
+const Show = ({ auth, employe, documents, paies }) => {
   const [isAddDocModalOpen, setIsAddDocModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [documentToDelete, setDocumentToDelete] = useState(null);
+  const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
+
+  const data = paies.map((paie) => ({
+    key: paie.id,
+    date: paie.date,
+    mois: new Date(paie.date).toLocaleDateString("fr-FR", {
+      month: "long",
+    }),
+    annee: new Date(paie.date).getFullYear(),
+    montant: Number(paie.montant).toFixed(2),
+    prime: paie.prime ? Number(paie.prime).toFixed(2) : "Aucune prime",
+  }));
+
+  const exportPDF = (data) => {
+    const doc = new jsPDF();
+
+    const img = new Image();
+    img.src = logo;
+    img.onload = () => {
+      doc.addImage(img, "PNG", 14, 10, 100, 40);
+
+      // Title and employee info
+      doc.setFontSize(12);
+      doc.text("Historique des Paiements", 150, 30);
+      doc.text("Employé : " + employe.nom + " " + employe.prenom, 150, 37);
+      doc.text(`Date : ${new Date().toLocaleDateString("fr-FR")}`, 150, 44);
+
+      // Table
+      autoTable(doc, {
+        head: [["Mois", "Année", "Salaire (DH)", "Prime (DH)"]],
+        body: data.map((paie) => [
+          paie.mois,
+          paie.annee,
+          paie.montant,
+          paie.prime ? paie.prime : "Aucune prime",
+        ]),
+        startY: 60,
+        styles: {
+          fontSize: 13,
+          cellPadding: 2,
+          halign: "center",
+          valign: "middle",
+        },
+      });
+
+      // Footer
+      doc.setFontSize(10);
+      doc.text(
+        "Ce document est généré à titre informatif. Veuillez contacter le département RH pour toute question relative à ce rapport.",
+        14,
+        doc.internal.pageSize.getHeight() - 10
+      );
+
+      doc.save("historique_paie.pdf");
+    };
+  };
 
   const handleDeleteDoc = () => {
     if (!documentToDelete) return;
@@ -456,18 +516,27 @@ const Show = ({ auth, employe, documents }) => {
                   >
                     <Edit className="h-4 w-4" /> Modifier
                   </Link>
-                  <Link
-                    href="#"
-                    className="w-full flex justify-center items-center gap-2 text-white bg-blue-600 hover:bg-blue-700 py-2 px-4 rounded-lg text-sm"
-                  >
-                    <CalendarDays className="h-4 w-4" /> Historique congés
-                  </Link>
-                  <Link
-                    href="#"
+                  {employe.status === "actif" ? (
+                    <button
+                      className="w-full flex justify-center items-center gap-2 text-white bg-red-600 hover:bg-red-700 py-2 px-4 rounded-lg text-sm"
+                      onClick={() => setIsStatusModalOpen(true)}
+                    >
+                      <UserRoundX className="h-4 w-4" /> Désactiver
+                    </button>
+                  ) : (
+                    <button
+                      className="w-full flex justify-center items-center gap-2 text-white bg-green-600 hover:bg-green-700 py-2 px-4 rounded-lg text-sm"
+                      onClick={() => setIsStatusModalOpen(true)}
+                    >
+                      <UserRoundCheck className="h-4 w-4" /> Activer
+                    </button>
+                  )}
+                  <button
+                    onClick={() => exportPDF(data)}
                     className="w-full flex justify-center items-center gap-2 text-white bg-purple-600 hover:bg-purple-700 py-2 px-4 rounded-lg text-sm"
                   >
-                    <FileText className="h-4 w-4" /> Fiches de paie
-                  </Link>
+                    <FileText className="h-4 w-4" /> Télécharger fiche de paie
+                  </button>
                 </div>
               </div>
             </div>
@@ -513,6 +582,50 @@ const Show = ({ auth, employe, documents }) => {
         okButtonProps={{ danger: true }}
       >
         <p>Êtes-vous sûr de vouloir supprimer ce document ?</p>
+      </Modal>
+
+      <Modal
+        title={`Confirmer la ${
+          employe.status === "actif" ? "désactivation" : "activation"
+        }`}
+        open={isStatusModalOpen}
+        centered
+        onCancel={() => setIsStatusModalOpen(false)}
+        okText={employe.status === "actif" ? "Désactiver" : "Activer"}
+        cancelText="Annuler"
+        okButtonProps={{ danger: employe.status === "actif" ? true : false }}
+        onOk={() => {
+          if (employe.status === "actif") {
+            router.delete(route("admin.employes.destroy", employe.id), {
+              onSuccess: () => {
+                message.success("Employé désactivé avec succès !");
+                setIsStatusModalOpen(false);
+              },
+              onError: (errors) => {
+                message.error("Erreur lors de la désactivation de l'employé.");
+              },
+            });
+          } else {
+            router.put(
+              route("admin.employes.activer", employe.id),
+              {},
+              {
+                onSuccess: () => {
+                  message.success("Employé activé avec succès !");
+                  setIsStatusModalOpen(false);
+                },
+                onError: (errors) => {
+                  message.error("Erreur lors de l'activation de l'employé.");
+                },
+              }
+            );
+          }
+        }}
+      >
+        <p>
+          Êtes-vous sûr de vouloir{" "}
+          {employe.status === "actif" ? "désactiver" : "activer"} cet employé ?
+        </p>
       </Modal>
     </AuthenticatedLayout>
   );
