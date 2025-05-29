@@ -5,7 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Models\User;
 use App\Models\Document;
 use App\Models\Departement;
+use Illuminate\Support\Str;
+use App\Mail\WelcomeEmployeeMail;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Mail;
 use App\Http\Requests\StoreEmployeRequest;
 use App\Http\Requests\UpdateEmployeRequest;
 use Illuminate\Support\Facades\Storage;
@@ -40,7 +43,6 @@ class EmployeController extends Controller
     {
         $validated = $request->validated();
         $validated['password'] = bcrypt($validated['password']);
-
         $user = User::create($validated);
 
         if ($request->hasFile('documents')) {
@@ -57,6 +59,7 @@ class EmployeController extends Controller
                 ]);
             }
         }
+        Mail::to($user->email)->send(new WelcomeEmployeeMail($user, $request->password));
         return redirect()->route('admin.employes.index')->with('success', 'Employé créé avec succès');
     }
 

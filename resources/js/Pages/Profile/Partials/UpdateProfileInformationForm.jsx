@@ -7,10 +7,10 @@ import { Transition } from '@headlessui/react';
 
 export default function UpdateProfileInformation({ mustVerifyEmail, status, className = '' }) {
     const user = usePage().props.auth.user;
-    console.log('user', user);
     
     const { data, setData, patch, errors, processing, recentlySuccessful } = useForm({
         nom: user.nom,
+        prenom: user.prenom,
         email: user.email,
     });
 
@@ -32,7 +32,7 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
 
             <form onSubmit={submit} className="mt-6 space-y-6">
                 <div>
-                    <InputLabel htmlFor="name" value="Name" />
+                    <InputLabel htmlFor="name" value="Nom" />
 
                     <TextInput
                         id="nom"
@@ -45,6 +45,21 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
                     />
 
                     <InputError className="mt-2" message={errors.nom} />
+                </div>
+                <div>
+                    <InputLabel htmlFor="prenom" value="Prénom" />
+
+                    <TextInput
+                        id="prenom"
+                        className="mt-1 block w-full"
+                        value={data.prenom}
+                        onChange={(e) => setData('prenom', e.target.value)}
+                        required
+                        isFocused
+                        autoComplete="prenom"
+                    />
+
+                    <InputError className="mt-2" message={errors.prenom} />
                 </div>
 
                 <div>
