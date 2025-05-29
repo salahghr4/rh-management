@@ -19,7 +19,7 @@ export default function CreateForm({ departements }) {
     status: "actif",
     salaire: "1500",
     role: "employe",
-    departement_id: "",
+    departement_id: "1",
     joures_conges_restant: 18,
     password: "",
     password_confirmation: "",

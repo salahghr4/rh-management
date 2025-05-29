@@ -38,6 +38,7 @@ Route::prefix('employe')->middleware(['auth', 'checkRole:employe,manager'])->nam
   Route::resource('employes', EmployeController::class)->only('index')->names('employes');
   Route::resource('conges', CongesController::class)->names('conges');
   Route::get('/paies', [PaieController::class, 'index'])->name('paies.index');
+  Route::get('/employes/{employe}/documents/{document}/download', [DocumentController::class, 'downloadDocument'])->name('employes.documents.download');
 });
 
 Route::middleware('auth')->group(function () {

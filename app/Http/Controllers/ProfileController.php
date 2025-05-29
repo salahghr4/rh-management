@@ -11,6 +11,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Redirect;
 use App\Http\Requests\ProfileUpdateRequest;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Support\Facades\Storage;
 
 class ProfileController extends Controller
 {
@@ -23,7 +24,16 @@ class ProfileController extends Controller
         return Inertia::render('Profile/Edit', [
             'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
             'status' => session('status'),
-            'employe' => $user
+            'employe' => $user,
+            'documents' => $user->documents->map(function ($document) {
+                return [
+                    'id' => $document->id,
+                    'file_name' => $document->file_name,
+                    'file_size' => $document->file_size,
+                    'file_extension' => $document->file_extension,
+                    'file_path' => Storage::url($document->file_path),
+                ];
+            }),
         ]);
     }
 

@@ -15,7 +15,7 @@ export default function Informations({ employe }) {
 
     return (
         <div className="">
-            <div className=" mx-auto">
+            <div className="mx-auto">
                 <section className=" rounded-xl  overflow-hidden">
                     {/* Header */}
                     <div className="pb-6">

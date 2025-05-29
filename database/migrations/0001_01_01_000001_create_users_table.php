@@ -25,7 +25,7 @@ return new class extends Migration
             $table->enum('status', ['actif', 'inactif'])->default('actif');
             $table->decimal('salaire', 8, 2);
             $table->enum('role', ['admin', 'employe', 'rh', 'manager'])->default('employe');
-            $table->foreignId('departement_id')->nullable()->constrained('departements')->onDelete('set null');
+            $table->foreignId('departement_id')->constrained('departements')->onDelete('cascade');
             $table->unsignedInteger('joures_conges_restant')->default(18);
             $table->string('password');
             $table->rememberToken();
