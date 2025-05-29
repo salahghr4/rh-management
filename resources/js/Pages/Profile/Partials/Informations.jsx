@@ -1,38 +1,25 @@
 import React from 'react';
 
-export default function Informations({ employe = {} }) {
-    // Default employee data for demo
-    const defaultEmploye = {
-        poste: "Développeur Full Stack",
-        departement: { nom: "Technologie" },
-        salaire: "75,000 €",
-        date_embauche: "15/03/2023",
-        type_contrat: "CDI",
-        status: "Actif",
-        telephone: "+33 1 23 45 67 89",
-        adresse: "123 Rue de la République, 75001 Paris"
-    };
-
-    const employeeData = { ...defaultEmploye, ...employe };
+export default function Informations({ employe }) {
 
     const infoItems = [
-        { label: "Post", value: employeeData.poste, icon: "💼" },
-        { label: "Département", value: employeeData.departement?.nom, icon: "🏢" },
-        { label: "Salaire", value: employeeData.salaire, icon: "💰" },
-        { label: "Date d'embauche", value: employeeData.date_embauche, icon: "📅" },
-        { label: "Contrat", value: employeeData.type_contrat, icon: "📋" },
-        { label: "Statut", value: employeeData.status, icon: "✅" },
-        { label: "Téléphone", value: employeeData.telephone, icon: "📞" },
-        { label: "Adresse", value: employeeData.adresse, icon: "📍" }
+        { label: "Post", value: employe.poste, icon: "💼" },
+        { label: "Département", value: employe.departement?.nom, icon: "🏢" },
+        { label: "Salaire", value: employe.salaire + " DH", icon: "💰" },
+        { label: "Date d'embauche", value: employe.date_embauche, icon: "📅" },
+        { label: "Contrat", value: employe.type_contrat, icon: "📋" },
+        { label: "Statut", value: employe.status, icon: "✅" },
+        { label: "Téléphone", value: employe.telephone, icon: "📞" },
+        { label: "Adresse", value: employe.adresse, icon: "📍" }
     ];
 
     return (
         <div className="">
             <div className=" mx-auto">
-                <section className=" border border-gray-100 rounded-xl  overflow-hidden">
+                <section className=" rounded-xl  overflow-hidden">
                     {/* Header */}
-                    <div className="bg-gradient-to-r from-blue-600 to-blue-700 px-8 py-6">
-                        <h2 className="text-2xl font-bold text-white flex items-center gap-3">
+                    <div className="pb-6">
+                        <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-3">
                             <div className="w-8 h-8 bg-white bg-opacity-20 rounded-lg flex items-center justify-center">
                                 👤
                             </div>
@@ -41,7 +28,7 @@ export default function Informations({ employe = {} }) {
                     </div>
 
                     {/* Content */}
-                    <div className="p-8">
+                    <div className="">
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             {infoItems.map((item, index) => (
                                 <div key={index} className="group hover:bg-gray-50 rounded-lg p-4 transition-all duration-200 border border-transparent hover:border-blue-100">

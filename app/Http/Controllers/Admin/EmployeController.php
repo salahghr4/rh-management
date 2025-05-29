@@ -59,7 +59,7 @@ class EmployeController extends Controller
                 ]);
             }
         }
-        Mail::to($user->email)->send(new WelcomeEmployeeMail($user, $request->password));
+        Mail::to($user->email)->queue(new WelcomeEmployeeMail($user, $request->password));
         return redirect()->route('admin.employes.index')->with('success', 'Employé créé avec succès');
     }
 

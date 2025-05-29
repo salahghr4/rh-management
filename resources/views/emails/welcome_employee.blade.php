@@ -10,14 +10,14 @@
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #2563eb 0%, #764ba2 100%);
             padding: 20px;
         }
-        
+
         .email-container {
             max-width: 800px;
             margin: 0 auto;
@@ -27,15 +27,15 @@
             overflow: hidden;
             backdrop-filter: blur(10px);
         }
-        
+
         .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #2563eb 0%, #764ba2 100%);
             padding: 40px 30px;
             text-align: center;
             position: relative;
             overflow: hidden;
         }
-        
+
         .header::before {
             content: '';
             position: absolute;
@@ -46,12 +46,12 @@
             background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
             animation: float 6s ease-in-out infinite;
         }
-        
+
         @keyframes float {
             0%, 100% { transform: translateY(0px) rotate(0deg); }
             50% { transform: translateY(-20px) rotate(180deg); }
         }
-        
+
         .logo-text {
             font-size: 32px;
             font-weight: 800;
@@ -63,7 +63,7 @@
             position: relative;
             z-index: 2;
         }
-        
+
         .header-subtitle {
             color: rgba(255, 255, 255, 0.9);
             font-size: 16px;
@@ -72,7 +72,7 @@
             position: relative;
             z-index: 2;
         }
-        
+
         .header h1 {
             color: #ffffff;
             font-size: 24px;
@@ -82,11 +82,11 @@
             position: relative;
             z-index: 2;
         }
-        
+
         .content {
             padding: 40px 30px;
         }
-        
+
         .greeting {
             font-size: 26px;
             color: #2d3748;
@@ -94,7 +94,7 @@
             font-weight: 600;
             text-align: center;
         }
-        
+
         .success-message {
             background: linear-gradient(135deg, #48bb78, #38a169);
             color: white;
@@ -105,7 +105,7 @@
             font-weight: 500;
             box-shadow: 0 4px 15px rgba(72, 187, 120, 0.3);
         }
-        
+
         .credentials-box {
             background: linear-gradient(135deg, #f7fafc, #edf2f7);
             border: 1px solid #e2e8f0;
@@ -115,7 +115,7 @@
             position: relative;
             overflow: hidden;
         }
-        
+
         .credentials-box::before {
             content: '';
             position: absolute;
@@ -123,24 +123,24 @@
             left: 0;
             right: 0;
             height: 4px;
-            background: linear-gradient(90deg, #667eea, #764ba2);
+            background: linear-gradient(90deg, #2563eb, #764ba2);
         }
-        
+
         .credential-item {
             display: flex;
             align-items: center;
             margin-bottom: 15px;
             padding: 10px 0;
         }
-        
+
         .credential-item:last-child {
             margin-bottom: 0;
         }
-        
+
         .credential-icon {
             width: 40px;
             height: 40px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: linear-gradient(135deg, #2563eb, #764ba2);
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -149,11 +149,11 @@
             color: white;
             font-weight: bold;
         }
-        
+
         .credential-info {
             flex: 1;
         }
-        
+
         .credential-label {
             font-weight: 700;
             color: #2d3748;
@@ -162,7 +162,7 @@
             letter-spacing: 0.5px;
             margin-bottom: 4px;
         }
-        
+
         .credential-value {
             color: #4a5568;
             font-size: 16px;
@@ -172,7 +172,7 @@
             border-radius: 6px;
             border: 1px solid #e2e8f0;
         }
-        
+
         .security-notice {
             background: linear-gradient(135deg, #fed7d7, #feb2b2);
             border-left: 4px solid #f56565;
@@ -181,19 +181,19 @@
             margin: 25px 0;
             color: #742a2a;
         }
-        
+
         .security-notice strong {
             color: #c53030;
         }
-        
+
         .cta-section {
             text-align: center;
             margin: 35px 0;
         }
-        
+
         .cta-button {
             display: inline-block;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #2563eb 0%, #764ba2 100%);
             color: #ffffff;
             text-decoration: none;
             padding: 16px 40px;
@@ -207,7 +207,7 @@
             position: relative;
             overflow: hidden;
         }
-        
+
         .cta-button::before {
             content: '';
             position: absolute;
@@ -218,16 +218,16 @@
             background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
             transition: left 0.5s;
         }
-        
+
         .cta-button:hover::before {
             left: 100%;
         }
-        
+
         .cta-button:hover {
             transform: translateY(-2px);
             box-shadow: 0 12px 35px rgba(102, 126, 234, 0.6);
         }
-        
+
         .footer {
             background: #2d3748;
             color: #a0aec0;
@@ -235,45 +235,45 @@
             padding: 30px;
             font-size: 14px;
         }
-        
+
         .footer-brand {
             color: #ffffff;
             font-weight: 600;
             margin-bottom: 10px;
         }
-        
+
         @media (max-width: 600px) {
             .email-container {
                 margin: 10px;
                 border-radius: 15px;
             }
-            
+
             .header, .content {
                 padding: 25px 20px;
             }
-            
+
             .header h1 {
                 font-size: 20px;
             }
-            
+
             .logo-text {
                 font-size: 24px;
                 letter-spacing: 2px;
             }
-            
+
             .greeting {
                 font-size: 20px;
             }
-            
+
             .credentials-box {
                 padding: 20px;
             }
-            
+
             .credential-item {
                 flex-direction: column;
                 text-align: center;
             }
-            
+
             .credential-icon {
                 margin: 0 0 10px 0;
             }
@@ -287,21 +287,21 @@
             <h1>Bienvenue dans votre espace</h1>
             <p class="header-subtitle">Votre compte a été créé avec succès</p>
         </div>
-        
+
         <div class="content">
             <div class="greeting">
                 Bonjour {{ $user->nom }} {{ $user->prenom }},
             </div>
-            
+
             <div class="success-message">
                 🎉 Votre compte a été créé avec succès !
             </div>
-            
+
             <p style="color: #4a5568; font-size: 16px; margin-bottom: 25px; text-align: center;">
                 Nous sommes ravis de vous accueillir dans notre plateforme.<br>
                 Voici vos informations de connexion :
             </p>
-            
+
             <div class="credentials-box">
                 <div class="credential-item">
                     <div class="credential-icon">@</div>
@@ -318,21 +318,21 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="security-notice">
                 <strong>⚠️ Important :</strong> Pour votre sécurité, nous vous recommandons fortement de vous connecter et de changer votre mot de passe après votre première connexion.
             </div>
-            
+
             <div class="cta-section">
                 <a href="{{ url('/login') }}" class="cta-button">Se connecter maintenant</a>
             </div>
-            
+
             <p style="color: #718096; font-size: 14px; text-align: center; margin-top: 30px;">
                 Si vous avez des questions, n'hésitez pas à nous contacter.<br>
                 Nous sommes là pour vous aider !
             </p>
         </div>
-        
+
         <div class="footer">
             <div class="footer-brand">{{ config('app.name') }}</div>
             <div>© {{ date('Y') }} Tous droits réservés</div>
