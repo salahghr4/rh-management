@@ -118,10 +118,10 @@ export default function Welcome({ auth }) {
                       d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
                     />
                   </svg>
-                  <span className="font-medium">Présences</span>
+                  <span className="font-medium">Absences</span>
                 </div>
                 <p className="text-sm text-gray-600">
-                  Suivez les présences et les congés
+                  Suivez les absences et les congés
                 </p>
               </div>
 
